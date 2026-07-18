@@ -45,16 +45,19 @@ The time label is the only metadata a dot has. A false time undermines the log's
 
 ---
 
-### 2026-07-18 — Repo consolidation
+### 2026-07-18 — Repo consolidation (RESOLVED same day)
 
 **Owner:** Filippos
-**Status:** OPEN
+**Status:** APPROVED
 
-**Decision needed:**
-`~/dotdone` holds the real app but has one stale commit and no remote. `filippos-swg/dotdone` on GitHub holds only privacy.html + support.html (via `~/Documents/Projects/dotdone` stub). Proposed: commit all work in `~/dotdone`, point it at `filippos-swg/dotdone`, force-push as canonical, retire the stub, later move folder to `~/Documents/Projects/dotdone`.
+**Decision:**
+All app work committed, remote history merged in (no force push — GitHub Pages files kept at root so App Store URLs stayed live), pushed to `filippos-swg/dotdone`. Folder moved from `~/dotdone` to `~/Documents/Projects/dotdone` per AIOS structure. Two redundant stub copies archived to `~/Documents/Archive/` (dotdone-github-stub, dotdone-github-stub-claude-copy). GitHub Desktop repointed to the new path.
 
-**Why it matters:**
-The shipped app currently exists only on one laptop. Single point of failure. Violates AIOS "GitHub is the source of truth."
+**Why:**
+The shipped app existed only on one laptop — single point of failure, violated AIOS "GitHub is the source of truth."
+
+**Practical consequence:**
+Canonical repo: `~/Documents/Projects/dotdone` ↔ `filippos-swg/dotdone`. DotDone is GREEN.
 
 ---
 

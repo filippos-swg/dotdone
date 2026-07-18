@@ -5,6 +5,17 @@ Most recent first. Short entries — state what changed and why.
 
 ---
 
+## 2026-07-18 — Repo consolidated and moved to Projects/
+
+### Updated
+- Repo — all v1.0 work committed and pushed to `filippos-swg/dotdone`; remote Pages files (privacy.html, support.html) merged to root, App Store URLs unaffected
+- Location — moved `~/dotdone` → `~/Documents/Projects/dotdone` per AIOS workspace structure
+
+### Removed
+- Stub clones at `~/Documents/Projects/dotdone` (old) and `~/Documents/Claude/projects/seriously wow/dotdone` — archived to `~/Documents/Archive/`
+
+---
+
 ## 2026-07-18 — AIOS v1 structure created
 
 ### Added
