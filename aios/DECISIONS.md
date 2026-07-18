@@ -13,6 +13,25 @@ Not meeting notes. Decisions only. Most recent first.
 
 ## Decision Log
 
+### 2026-07-18 — v1.2/v1.3 roadmap: reminders → export → widget
+
+**Owner:** Filippos
+**Status:** APPROVED
+
+**Decision:**
+After v1.1 (TASK_001), the roadmap is: opt-in daily reminders per task (TASK_002), JSON export via share sheet (TASK_003), then iOS home-screen widget (TASK_004, blocked until v1.1 ships and v1.0 clears Apple review).
+
+**Why:**
+Reminders serve the core medication use case — a log you forget to open doesn't close the memory gap. Export insures local-only data against device loss at near-zero UI cost. The widget is the strongest expression of one-tap logging but the biggest lift (native WidgetKit target, App Group storage migration), so it goes last.
+
+**Alternatives considered:**
+Streak counters, weekly summaries, notes on dots — rejected. Each is the first step toward the generic habit app the canon forbids.
+
+**Practical consequence:**
+Task files TASK_002–004 created. Sequence is fixed; do not reorder without a new decision entry.
+
+---
+
 ### 2026-07-18 — v1.1 scope: calendar quick-dot with backfill
 
 **Owner:** Filippos

@@ -27,16 +27,15 @@ Before working, read these files in order:
 - Storage: expo-file-system/legacy JSON (`dotdone_entries.json`, `dotdone_tasks.json`)
 - Tasks system: 36-color transit palette, hold-on-Home palette, MY TASKS CRUD — shipped in v1.0
 - v1.1 scope: calendar quick-dot with backfill (TASK_001)
+- Roadmap: v1.2 reminders (TASK_002) + export (TASK_003), v1.3 widget (TASK_004)
 
 ### What is RECOMMENDED but not confirmed
 
-- v1.2 candidates (owner to prioritise): opt-in daily reminder notification; JSON export via share sheet; iOS home-screen widget
-- Repo fix: commit `~/dotdone` work, point at `filippos-swg/dotdone`, retire the stub in `~/Documents/Projects/dotdone`
+- (nothing currently — roadmap through v1.3 is APPROVED, see DECISIONS 2026-07-18)
 
 ### What is OPEN
 
 - Timestamp convention for backfilled dots (see DECISIONS.md) — blocks TASK_001 display logic
-- Repo consolidation approach — blocks GitHub sync
 - Apple review outcome — v1.0 resubmission pending; a rejection changes v1.1 priorities
 
 ---

@@ -5,6 +5,16 @@ Most recent first. Short entries — state what changed and why.
 
 ---
 
+## 2026-07-18 — Roadmap tasks created (TASK_002–004)
+
+### Added
+- `aios/tasks/TASK_002.md` — opt-in daily reminders per task (v1.2)
+- `aios/tasks/TASK_003.md` — JSON export via share sheet (v1.2)
+- `aios/tasks/TASK_004.md` — iOS home-screen widget (v1.3, blocked until v1.1 ships)
+- DECISIONS: roadmap sequence approved; streaks/stats/notes explicitly rejected per canon
+
+---
+
 ## 2026-07-18 — Repo consolidated and moved to Projects/
 
 ### Updated
