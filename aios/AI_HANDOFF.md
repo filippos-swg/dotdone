@@ -2,8 +2,9 @@
 
 **Project:** DotDone
 **Last updated:** 2026-07-18
-**Active phase:** v1.0 LIVE on the App Store (approved 2026-07-18). v1.1 submission in progress
-**Active task:** TASK_002 — Opt-in Daily Reminders (next up)
+**Active phase:** v1.0 LIVE. v1.1 build running on EAS — owner completes submission manually
+**Paused:** 2026-07-18. Owner's remaining steps: (1) `eas submit --platform ios --latest` when build finishes, (2) create version 1.1.0 in App Store Connect, paste What's New from `assets/appstore/release-notes-1.1.md`, attach build, (3) Submit for Review
+**Active task:** TASK_002 — Opt-in Daily Reminders (start next session)
 **Status:** Ready
 
 ---
