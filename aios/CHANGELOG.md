@@ -5,6 +5,21 @@ Most recent first. Short entries — state what changed and why.
 
 ---
 
+## 2026-07-18 — TASK_001 built: calendar quick-dot with backfill
+
+### Added
+- `src/components/TaskPalette.tsx` — palette extracted from HomeScreen into shared component
+- CalendarScreen: centered + button in footer (HOME | + | MY TASKS, three flex:1 slots); opens palette; dot saved to the currently selected day, in-place refresh
+- Backfill display: dots whose creation date differs from their day show "ADDED LATER" instead of a time (DECISIONS 2026-07-18)
+
+### Updated
+- HomeScreen — refactored to use shared TaskPalette; tap/hold behavior unchanged
+
+### Notes
+Awaiting device test. Found during build: node_modules was pruned (~393/774 packages) and expo-font / expo-file-system / @expo/vector-icons are only transitive deps — owner to run `npm install` + `npx expo install expo-font expo-file-system @expo/vector-icons`.
+
+---
+
 ## 2026-07-18 — Roadmap tasks created (TASK_002–004)
 
 ### Added

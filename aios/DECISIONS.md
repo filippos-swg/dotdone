@@ -51,16 +51,19 @@ Calendar gets an add affordance (+ button, same View-based cross as TasksScreen)
 
 ---
 
-### 2026-07-18 — Timestamp convention for backfilled dots
+### 2026-07-18 — Timestamp convention for backfilled dots: "ADDED LATER"
 
 **Owner:** Filippos
-**Status:** OPEN
+**Status:** APPROVED
 
-**Decision needed:**
-When a dot is added to a past day, what timestamp does it get? Options: (a) actual creation time with the past date — calendar would show a misleading time-of-day; (b) a neutral marker (e.g. no time shown, dot displays as "ADDED LATER"); (c) 12:00 noon convention.
+**Decision:**
+Backfilled dots display "ADDED LATER" instead of a time. `timestamp` stores the true creation moment; the display layer shows the label whenever the timestamp's local date differs from `entry.date`. No schema change, backward compatible.
 
-**Why it matters:**
-The time label is the only metadata a dot has. A false time undermines the log's trustworthiness — the core value.
+**Alternatives considered:**
+Fake noon convention or creation-time display — both corrupt the only metadata a dot has. Time picker for backfill — rejected as friction for fake precision.
+
+**Practical consequence:**
+The log stays honest: real times are always real, reconstructed entries are visibly reconstructed. No ability to backfill with a specific time — deliberate.
 
 ---
 

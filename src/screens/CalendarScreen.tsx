@@ -12,11 +12,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import {
   getAllEntries,
+  addEntry,
   deleteEntry,
   hasDeleteHintBeenSeen,
   markDeleteHintSeen,
 } from '../storage/entries';
-import { DotEntry } from '../types';
+import { getAllTasks } from '../storage/tasks';
+import { DotEntry, DotTask } from '../types';
 import {
   todayString,
   addDays,
@@ -29,7 +31,10 @@ import {
   getISOWeek,
   getMonthYearLabel,
   parseDate,
+  dateToString,
+  generateId,
 } from '../utils/dateUtils';
+import TaskPalette, { PaletteItem } from '../components/TaskPalette';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calendar'>;
 
@@ -49,6 +54,8 @@ export default function CalendarScreen({ navigation, route }: Props) {
   const [viewMode, setViewMode] = useState<'week' | 'month'>('week');
   const [allEntries, setAllEntries] = useState<DotEntry[]>([]);
   const [showHint, setShowHint] = useState(false);
+  const [showPalette, setShowPalette] = useState(false);
+  const [tasks, setTasks] = useState<DotTask[]>([]);
 
   // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -61,12 +68,38 @@ export default function CalendarScreen({ navigation, route }: Props) {
   const loadData = async () => {
     const entries = await getAllEntries();
     setAllEntries(entries);
+    const allTasks = await getAllTasks();
+    setTasks(allTasks);
     const seen = await hasDeleteHintBeenSeen();
     if (!seen && entries.length > 0) {
       setShowHint(true);
       await markDeleteHintSeen();
     }
   };
+
+  // ── Add dot on selected day ──────────────────────────────────────────────────
+
+  const handleAddDot = async (item: PaletteItem) => {
+    setShowPalette(false);
+    const entry: DotEntry = {
+      id: generateId(),
+      date: selectedDate,
+      timestamp: new Date().toISOString(),
+      actionName: item.name === 'DEFAULT' ? 'Default' : item.name,
+      color: item.color,
+      taskId: item.id === 'default' ? undefined : item.id,
+    };
+    try {
+      await addEntry(entry);
+      await loadData();
+    } catch (err) {
+      Alert.alert('SAVE ERROR', String(err));
+    }
+  };
+
+  // True when the dot was logged on a different day than it belongs to
+  const isBackfilled = (entry: DotEntry) =>
+    dateToString(new Date(entry.timestamp)) !== entry.date;
 
   // ── Derived ───────────────────────────────────────────────────────────────────
 
@@ -180,7 +213,11 @@ export default function CalendarScreen({ navigation, route }: Props) {
             >
               <View style={[styles.dotBullet, { backgroundColor: resolveColor(entry.color) }]} />
               <View style={styles.dotInfo}>
-                <Text style={styles.timeLabel}>{formatTime(entry.timestamp)}</Text>
+                {isBackfilled(entry) ? (
+                  <Text style={styles.addedLaterLabel}>ADDED LATER</Text>
+                ) : (
+                  <Text style={styles.timeLabel}>{formatTime(entry.timestamp)}</Text>
+                )}
                 {entry.actionName !== 'Default' && (
                   <Text style={styles.taskNameLabel}>{entry.actionName}</Text>
                 )}
@@ -283,21 +320,43 @@ export default function CalendarScreen({ navigation, route }: Props) {
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
       <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.footerBtn}
-          onPress={() => navigation.navigate('Home')}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.footerBtnText}>HOME</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.footerBtn}
-          onPress={() => navigation.navigate('Tasks')}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.footerBtnText}>MY TASKS</Text>
-        </TouchableOpacity>
+        <View style={styles.footerSlot}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Home')}
+            activeOpacity={0.6}
+          >
+            <Text style={styles.footerBtnText}>HOME</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.footerSlot}>
+          <TouchableOpacity
+            style={styles.addBtn}
+            onPress={() => setShowPalette(true)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.plusH} />
+            <View style={styles.plusV} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.footerSlot}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Tasks')}
+            activeOpacity={0.6}
+          >
+            <Text style={styles.footerBtnText}>MY TASKS</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {/* ── Task palette (adds a dot to the selected day) ────────────────────── */}
+      <TaskPalette
+        visible={showPalette}
+        tasks={tasks}
+        onSelect={handleAddDot}
+        onClose={() => setShowPalette(false)}
+      />
 
     </View>
   );
@@ -376,6 +435,12 @@ const styles = StyleSheet.create({
     fontFamily: FONT,
     fontSize: 18,
     color: '#000',
+  },
+  addedLaterLabel: {
+    fontFamily: FONT,
+    fontSize: 12,
+    color: '#999',
+    letterSpacing: 0.5,
   },
   taskNameLabel: {
     fontFamily: FONT,
@@ -465,15 +530,40 @@ const styles = StyleSheet.create({
   // ── Footer ────────────────────────────────────────────────────────────────────
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    alignItems: 'center',
     paddingVertical: 16,
     paddingBottom: 40,
   },
-  footerBtn: { alignItems: 'center' },
+  footerSlot: {
+    flex: 1,
+    alignItems: 'center',
+  },
   footerBtnText: {
     fontFamily: FONT,
     fontSize: 11,
     color: '#000',
     letterSpacing: 0.5,
+  },
+  addBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  plusH: {
+    position: 'absolute',
+    width: 18,
+    height: 2,
+    backgroundColor: '#fff',
+    borderRadius: 1,
+  },
+  plusV: {
+    position: 'absolute',
+    width: 2,
+    height: 18,
+    backgroundColor: '#fff',
+    borderRadius: 1,
   },
 });

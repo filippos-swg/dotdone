@@ -8,9 +8,6 @@ import {
   TouchableOpacity,
   StatusBar,
   GestureResponderEvent,
-  Modal,
-  FlatList,
-  ScrollView,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -20,14 +17,13 @@ import { addEntry, getAllEntries } from '../storage/entries';
 import { getAllTasks } from '../storage/tasks';
 import { DotEntry } from '../types';
 import { todayString, generateId } from '../utils/dateUtils';
+import TaskPalette, { PaletteItem } from '../components/TaskPalette';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const FONT = 'NDot47';
 const RECENT_THRESHOLD_MS = 5000;
 const DOT_SIZE = 72;
-
-type PaletteItem = { id: string; name: string; color: string };
 
 export default function HomeScreen({ navigation }: Props) {
   const [pressing, setPressing] = useState(false);
@@ -41,13 +37,6 @@ export default function HomeScreen({ navigation }: Props) {
       getAllTasks().then(setTasks);
     }, [])
   );
-
-  // ── Palette items: default black dot + user tasks ─────────────────────────
-
-  const paletteItems: PaletteItem[] = [
-    { id: 'default', name: 'DEFAULT', color: '#000000' },
-    ...tasks.map(t => ({ id: t.id, name: t.name, color: t.color })),
-  ];
 
   // ── Save logic ────────────────────────────────────────────────────────────
 
@@ -187,37 +176,13 @@ export default function HomeScreen({ navigation }: Props) {
         </TouchableOpacity>
       </View>
 
-      {/* ── Task palette modal ───────────────────────────────────────────────── */}
-      <Modal
+      {/* ── Task palette ─────────────────────────────────────────────────────── */}
+      <TaskPalette
         visible={showPalette}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowPalette(false)}
-      >
-        <Pressable style={styles.backdrop} onPress={() => setShowPalette(false)}>
-          <View style={styles.paletteSheet}>
-            <Text style={styles.paletteTitle}>CHOOSE A TASK</Text>
-            <ScrollView contentContainerStyle={styles.paletteGrid}>
-              {paletteItems.map(item => (
-                <TouchableOpacity
-                  key={item.id}
-                  style={styles.paletteItem}
-                  onPress={() => handleSelectTask(item)}
-                  activeOpacity={0.7}
-                >
-                  <View style={[styles.paletteDot, { backgroundColor: item.color }]} />
-                  <Text style={styles.paletteName} numberOfLines={1}>
-                    {item.name}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-            <TouchableOpacity style={styles.cancelPalette} onPress={() => setShowPalette(false)}>
-              <Text style={styles.cancelPaletteText}>CANCEL</Text>
-            </TouchableOpacity>
-          </View>
-        </Pressable>
-      </Modal>
+        tasks={tasks}
+        onSelect={handleSelectTask}
+        onClose={() => setShowPalette(false)}
+      />
     </View>
   );
 }
@@ -260,61 +225,4 @@ const styles = StyleSheet.create({
   },
   footerBtn: { alignItems: 'center', gap: 4 },
   footerBtnText: { fontFamily: FONT, fontSize: 11, color: '#000', letterSpacing: 0.5 },
-
-  // ── Palette ──────────────────────────────────────────────────────────────────
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'flex-end',
-  },
-  paletteSheet: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingTop: 24,
-    paddingHorizontal: 24,
-    paddingBottom: 40,
-    maxHeight: '60%',
-  },
-  paletteTitle: {
-    fontFamily: FONT,
-    fontSize: 11,
-    color: '#999',
-    textAlign: 'center',
-    marginBottom: 20,
-    letterSpacing: 1,
-  },
-  paletteGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-    justifyContent: 'flex-start',
-    paddingBottom: 16,
-  },
-  paletteItem: {
-    alignItems: 'center',
-    width: 64,
-    gap: 6,
-  },
-  paletteDot: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-  },
-  paletteName: {
-    fontFamily: FONT,
-    fontSize: 9,
-    color: '#000',
-    textAlign: 'center',
-  },
-  cancelPalette: {
-    alignItems: 'center',
-    paddingVertical: 12,
-    marginTop: 4,
-  },
-  cancelPaletteText: {
-    fontFamily: FONT,
-    fontSize: 11,
-    color: '#999',
-  },
 });

@@ -1,6 +1,6 @@
 # TASK 001 — Calendar Quick-Dot with Backfill (v1.1)
 
-**Status:** Not started
+**Status:** In progress — built, awaiting device test
 **Owner:** AI (Claude session) with Filippos review
 **Reviewer:** Filippos
 **Branch:** task/001-calendar-quick-dot
@@ -41,10 +41,10 @@ Current flow forces Home → tap → auto-navigate to Calendar. Reviewing the ca
 
 ## Done When
 
-- [ ] Dot can be created on Calendar for today without leaving the screen
-- [ ] Dot can be created for a past selected day
-- [ ] Backdated timestamp convention decided and implemented
-- [ ] Palette is a single shared component used by Home and Calendar
+- [x] Dot can be created on Calendar for today without leaving the screen
+- [x] Dot can be created for a past selected day
+- [x] Backdated timestamp convention decided and implemented ("ADDED LATER")
+- [x] Palette is a single shared component used by Home and Calendar
 - [ ] Tested in Expo Go on device
 - [ ] `aios/CHANGELOG.md` updated
 - [ ] `aios/AI_HANDOFF.md` updated with next active task

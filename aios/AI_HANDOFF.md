@@ -4,7 +4,7 @@
 **Last updated:** 2026-07-18
 **Active phase:** v1.0 in Apple review / v1.1 planning
 **Active task:** TASK_001 — Calendar Quick-Dot with Backfill
-**Status:** Ready (blocked only on backfill timestamp decision)
+**Status:** In progress — TASK_001 built, awaiting device test
 
 ---
 
@@ -35,7 +35,6 @@ Before working, read these files in order:
 
 ### What is OPEN
 
-- Timestamp convention for backfilled dots (see DECISIONS.md) — blocks TASK_001 display logic
 - Apple review outcome — v1.0 resubmission pending; a rejection changes v1.1 priorities
 
 ---
