@@ -13,7 +13,12 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "se.southnorth.dotdone",
+      "privacyPolicyUrl": "https://filippos-swg.github.io/dotdone/privacy.html",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +30,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "767c1a31-dc07-4ca5-9101-9a6e20f5dbb4"
+      }
     }
   }
 }
