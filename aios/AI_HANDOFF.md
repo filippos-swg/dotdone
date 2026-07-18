@@ -2,7 +2,7 @@
 
 **Project:** DotDone
 **Last updated:** 2026-07-18
-**Active phase:** v1.1 code-complete, holding release until Apple decides on v1.0
+**Active phase:** v1.0 LIVE on the App Store (approved 2026-07-18). v1.1 submission in progress
 **Active task:** TASK_002 — Opt-in Daily Reminders (next up)
 **Status:** Ready
 
@@ -35,7 +35,7 @@ Before working, read these files in order:
 
 ### What is OPEN
 
-- Apple review outcome — v1.0 resubmission pending. Release strategy: do NOT submit a new build while v1.0 sits in the queue (it restarts the review clock). If approved → bump version to 1.1.0, EAS build + submit. If rejected → fold fixes and the v1.1 features into one resubmission.
+- v1.1 review outcome (submitted after v1.0 approval; version bumped to 1.1.0)
 
 ---
 

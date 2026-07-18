@@ -5,6 +5,17 @@ Most recent first. Short entries — state what changed and why.
 
 ---
 
+## 2026-07-18 — v1.0 APPROVED AND LIVE on the App Store
+
+### Notes
+Apple approved the resubmission. Both rejection grounds (4.2 minimum functionality, 1.5 support URL) cleared. DotDone is publicly available.
+
+### Updated
+- `app.json` — version bumped to 1.1.0 for the calendar quick-dot release
+- `assets/appstore/release-notes-1.1.md` — What's New text and submission steps
+
+---
+
 ## 2026-07-18 — TASK_001 closed: device test passed
 
 ### Notes
