@@ -2,9 +2,9 @@
 
 **Project:** DotDone
 **Last updated:** 2026-07-18
-**Active phase:** v1.0 in Apple review / v1.1 planning
-**Active task:** TASK_001 — Calendar Quick-Dot with Backfill
-**Status:** In progress — TASK_001 built, awaiting device test
+**Active phase:** v1.1 code-complete, holding release until Apple decides on v1.0
+**Active task:** TASK_002 — Opt-in Daily Reminders (next up)
+**Status:** Ready
 
 ---
 
@@ -26,7 +26,7 @@ Before working, read these files in order:
 - Canon: one-tap logging, dot as the only unit, local-only data, NDot47 black-on-white aesthetic, no gamification/social/stats
 - Storage: expo-file-system/legacy JSON (`dotdone_entries.json`, `dotdone_tasks.json`)
 - Tasks system: 36-color transit palette, hold-on-Home palette, MY TASKS CRUD — shipped in v1.0
-- v1.1 scope: calendar quick-dot with backfill (TASK_001)
+- v1.1 feature set: calendar quick-dot with backfill — DONE, device-tested (TASK_001)
 - Roadmap: v1.2 reminders (TASK_002) + export (TASK_003), v1.3 widget (TASK_004)
 
 ### What is RECOMMENDED but not confirmed
@@ -35,7 +35,7 @@ Before working, read these files in order:
 
 ### What is OPEN
 
-- Apple review outcome — v1.0 resubmission pending; a rejection changes v1.1 priorities
+- Apple review outcome — v1.0 resubmission pending. Release strategy: do NOT submit a new build while v1.0 sits in the queue (it restarts the review clock). If approved → bump version to 1.1.0, EAS build + submit. If rejected → fold fixes and the v1.1 features into one resubmission.
 
 ---
 

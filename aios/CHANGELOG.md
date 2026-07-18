@@ -5,6 +5,13 @@ Most recent first. Short entries — state what changed and why.
 
 ---
 
+## 2026-07-18 — TASK_001 closed: device test passed
+
+### Notes
+Owner tested on device: calendar + button, palette, dot on selected day, backfill on past day with ADDED LATER label, Home tap/hold unchanged. v1.1 feature set is code-complete. Release held until Apple decides on v1.0 (see AI_HANDOFF release strategy).
+
+---
+
 ## 2026-07-18 — TASK_001 built: calendar quick-dot with backfill
 
 ### Added
