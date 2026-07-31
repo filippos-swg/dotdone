@@ -5,4 +5,4 @@ HEAD at close-start: e5c5791
 Session: repair what the v2 migration broke, and recover what it deleted
 
 - [x] 1-2
-- [ ] 3-11
+- [x] 3-9. aios check exit=0
