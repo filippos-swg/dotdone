@@ -1,0 +1,9 @@
+# CLOSING — close ledger
+
+Opened: 2026-07-31 11:35 +0300
+HEAD at close-start: 017486a
+Session: migrate dotdone to AiOS v2.0
+
+- [x] 1. Open the close ledger, committed alone
+- [ ] 2. Update the task
+- [ ] 3-11
