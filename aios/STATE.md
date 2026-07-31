@@ -1,8 +1,6 @@
 <!-- GENERATED — do not edit. Edits are overwritten at next close. -->
-Generated 2026-07-31 11:22 +0300 · HEAD 017486a · branch main · host Souths-Air · generator v2.0 · PARTIAL
-STALENESS RULE: if `git rev-parse HEAD` ≠ 017486a, or the tree is dirty, this file is HISTORY. Regenerate before acting on it.
-
-> **PARTIAL.** At least one git-derived section could not run. This surface may ground a read-only session and **may never ground a close.** The gaps are in §11.
+Generated 2026-07-31 11:26 +0300 · HEAD dd3d7d9 · branch main · host Souths-Air · generator v2.0
+STALENESS RULE: if `git rev-parse HEAD` ≠ dd3d7d9, or the tree is dirty, this file is HISTORY. Regenerate before acting on it.
 
 ## 1 · Identity
 <sub>CLAUDE.md, the five human lines — the only human input in this file</sub>
@@ -16,14 +14,14 @@ STALENESS RULE: if `git rev-parse HEAD` ≠ 017486a, or the tree is dirty, this 
 ## 2 · Head
 <sub>git rev-parse HEAD · git log -1 · git rev-list --left-right --count @{u}...HEAD</sub>
 
-- **main @ 017486a** — Handoff: pause point — v1.1 build running, owner submits; TASK_002 next session
-- Committed 2026-07-18 14:37 by Filippos Arvanitakis
-- Upstream: origin/main · **0 ahead**, 0 behind
+- **main @ dd3d7d9** — feat: migrate to AiOS v2.0
+- Committed 2026-07-31 11:22 by Filippos Arvanitakis
+- Upstream: origin/main · **2 ahead**, 0 behind
 
 ## 3 · Working tree
 <sub>git status --porcelain + a filesystem diff against git ls-files</sub>
 
-- **8 staged:** `CLAUDE.md`, `aios/AI_HANDOFF.md`, `aios/CANON.md`, `aios/CHANGELOG.md`, `aios/DECISIONS.md`, `aios/LOG.md`, `aios/PROJECT_BRIEF.md`, `aios/PROJECT_CANON.md`
+- **2 modified:** `aios/CLOSING`, `aios/STATE.md`
 
 ## 4 · Local-only branches
 <sub>git for-each-ref refs/heads, where %(upstream) is empty</sub>
@@ -31,11 +29,11 @@ STALENESS RULE: if `git rev-parse HEAD` ≠ 017486a, or the tree is dirty, this 
 - None. Every branch has an upstream.
 
 ## 5 · Since last close
-<sub>no close marker yet — first surface</sub>
+<sub>git log dd3d7d9..HEAD</sub>
 
-- **No previous close marker.** This is the first generated surface for this repo; the next close writes one here.
+- Nothing since `dd3d7d9`.
 
-Close marker: 017486a966dfb495525a95c26816904c2c140e57
+Close marker: dd3d7d91fe3079268bca05d255d9c7a2616b1c8c
 
 ## 6 · Awaiting judgment
 <sub>aios/LOG.md headings + **Status:** lines — headings, dates and statuses only, never bodies</sub>
@@ -45,7 +43,6 @@ Close marker: 017486a966dfb495525a95c26816904c2c140e57
 ## 7 · Active tasks
 <sub>aios/tasks/* + git log -1 -- <file></sub>
 
-- `TASK_001.md` — Done — device-tested 2026-07-18 · **8/8 ticked** · last touched 12d ago
 - `TASK_002.md` — Not started (sequenced after TASK_001) · **0/7 ticked** · last touched 13d ago
 - `TASK_003.md` — Not started (sequenced after TASK_002) · **0/6 ticked** · last touched 13d ago
 - `TASK_004.md` — Not started — BLOCKED until v1.1 ships and v1.0 passes Apple · **0/6 ticked** · last touched 13d ago
@@ -53,14 +50,16 @@ Close marker: 017486a966dfb495525a95c26816904c2c140e57
 ## 8 · Staleness
 <sub>git log -1 --format=%ad -- <path>, worst 10</sub>
 
-- `assets/appstore/eas-build-guide.md` — 13d old, **0d behind** the newest commit in the repo
-- `assets/appstore/metadata.md` — 13d old, **0d behind** the newest commit in the repo
-- `assets/appstore/resubmission-v2-recap.md` — 13d old, **0d behind** the newest commit in the repo
-- `aios/tasks/TASK_002.md` — 13d old, **0d behind** the newest commit in the repo
-- `aios/tasks/TASK_003.md` — 13d old, **0d behind** the newest commit in the repo
-- `aios/tasks/TASK_004.md` — 13d old, **0d behind** the newest commit in the repo
-- `aios/tasks/TASK_001.md` — 12d old, **0d behind** the newest commit in the repo
-- `assets/appstore/release-notes-1.1.md` — 12d old, **0d behind** the newest commit in the repo
+- `assets/appstore/eas-build-guide.md` — 13d old, **13d behind** the newest commit in the repo
+- `assets/appstore/metadata.md` — 13d old, **13d behind** the newest commit in the repo
+- `assets/appstore/resubmission-v2-recap.md` — 13d old, **13d behind** the newest commit in the repo
+- `aios/tasks/TASK_002.md` — 13d old, **13d behind** the newest commit in the repo
+- `aios/tasks/TASK_003.md` — 13d old, **13d behind** the newest commit in the repo
+- `aios/tasks/TASK_004.md` — 13d old, **13d behind** the newest commit in the repo
+- `assets/appstore/release-notes-1.1.md` — 12d old, **12d behind** the newest commit in the repo
+- `CLAUDE.md` — 0d old, **0d behind** the newest commit in the repo
+- `aios/CANON.md` — 0d old, **0d behind** the newest commit in the repo
+- `aios/LOG.md` — 0d old, **0d behind** the newest commit in the repo
 
 ## 9 · Cross-repo pins
 <sub>CLAUDE.md `Depends on:` (human) + the sibling's own git</sub>
@@ -74,11 +73,9 @@ Close marker: 017486a966dfb495525a95c26816904c2c140e57
 ## 11 · Could not determine
 <sub>the generator's own error list</sub>
 
-- §5 — no close marker in the previous surface — this is the first surface, so "since last close" is the whole reachable history and is reported as such
-- §6 — LOG.md:180 heading carries no parseable date: "2026-07 — v1.0 resubmitted to Apple"
-- §6 — LOG.md:191 heading carries no parseable date: "2026-05/06 — Tasks system built (Guideline 4.2 response)"
-- §6 — LOG.md:207 heading carries no parseable date: "2026-05 — v1.0 core app"
-- **§3 — the tree is dirty: 8 path(s) uncommitted, so nothing in this surface describes them. The record here describes code committed nowhere.**
+- §6 — LOG.md:182 heading carries no parseable date: "2026-07 — v1.0 resubmitted to Apple"
+- §6 — LOG.md:193 heading carries no parseable date: "2026-05/06 — Tasks system built (Guideline 4.2 response)"
+- §6 — LOG.md:209 heading carries no parseable date: "2026-05 — v1.0 core app"
 
 ---
 <sub>Generated by `bin/aios-state.mjs` v2.0 in /Users/southnorthflip/Documents/Projects/dotdone. A hand edit is check failure S1.</sub>
