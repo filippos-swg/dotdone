@@ -18,7 +18,7 @@ The core use case is medication. A log you forget to open doesn't close the memo
 
 ## Instructions
 
-1. Read: `aios/PROJECT_BRIEF.md`, `aios/PROJECT_CANON.md`
+1. Read: `aios/STATE.md` first, then `aios/CANON.md`
 2. Use expo-notifications, local scheduled notifications only — no push, no server
 3. Add toggle + time picker inside the existing task edit form in TasksScreen — no new screens
 4. Notification copy is the task name + "?" — nothing motivational, no emoji, no streak language
@@ -45,5 +45,5 @@ The core use case is medication. A log you forget to open doesn't close the memo
 - [ ] Logging a dot for the task before the set time suppresses that day's notification
 - [ ] Permission requested lazily, denial handled silently
 - [ ] Tested on device
-- [ ] `aios/CHANGELOG.md` + `aios/AI_HANDOFF.md` updated
+- [ ] Decision or change entry written in `aios/LOG.md`; `aios/STATE.md` regenerated at close
 - [ ] Human review complete

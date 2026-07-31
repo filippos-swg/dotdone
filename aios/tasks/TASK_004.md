@@ -24,8 +24,8 @@ Highest long-term value, biggest technical lift. Requires a native WidgetKit ext
 
 ## Instructions
 
-1. Read: `aios/PROJECT_BRIEF.md`, `aios/PROJECT_CANON.md`, `aios/DECISIONS.md`
-2. Resolve the three scope decisions above with Filippos, log them in DECISIONS.md
+1. Read: `aios/STATE.md` first, then `aios/CANON.md`, then `aios/LOG.md`
+2. Resolve the three scope decisions above with Filippos, log them in `aios/LOG.md`
 3. Spike: config plugin (e.g. @bacons/apple-targets or expo-apple-targets) for the widget target; verify EAS build works before writing widget UI
 4. Widget visual: NDot47 aesthetic, single dot on white, task name below — nothing else
 
@@ -46,5 +46,5 @@ Highest long-term value, biggest technical lift. Requires a native WidgetKit ext
 - [ ] App and widget read/write the same store with no data loss
 - [ ] Existing users' data migrates transparently
 - [ ] EAS production build passes
-- [ ] `aios/CHANGELOG.md` + `aios/AI_HANDOFF.md` updated
+- [ ] Decision or change entry written in `aios/LOG.md`; `aios/STATE.md` regenerated at close
 - [ ] Human review complete

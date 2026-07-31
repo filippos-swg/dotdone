@@ -18,7 +18,7 @@ All data is local by design (canon). That also means one lost or reset phone era
 
 ## Instructions
 
-1. Read: `aios/PROJECT_BRIEF.md`, `aios/PROJECT_CANON.md`
+1. Read: `aios/STATE.md` first, then `aios/CANON.md`
 2. Combine entries + tasks into one JSON: `{ version: 1, exportedAt, tasks: [...], entries: [...] }`
 3. Write to a temp file, hand it to the share sheet via expo-sharing
 4. Placement: a single "EXPORT DATA" text row at the bottom of the MY TASKS screen — small, grey, out of the way
@@ -41,5 +41,5 @@ All data is local by design (canon). That also means one lost or reset phone era
 - [ ] Share sheet opens and file transfers via AirDrop and Files
 - [ ] Zero-data state handled (exports empty arrays, doesn't crash)
 - [ ] Tested on device
-- [ ] `aios/CHANGELOG.md` + `aios/AI_HANDOFF.md` updated
+- [ ] Decision or change entry written in `aios/LOG.md`; `aios/STATE.md` regenerated at close
 - [ ] Human review complete

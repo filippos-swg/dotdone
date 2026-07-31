@@ -72,6 +72,30 @@ accounts, Android until iOS is proven, Apple Watch.
 - **App Store review.** Minimal apps attract Guideline 4.2 scrutiny; two rejections already.
   Every release has to demonstrably add utility.
 
+## What must not be touched
+
+Recovered from `AI_HANDOFF.md` before that file was deleted in the v2 migration. These are
+canon — they change only on a dated decision — and they were sitting in a state file that
+was rewritten every session.
+
+- **The Home tap/hold mechanic.** The behaviour is final.
+- **Storage file names and existing JSON shapes.** `dotdone_entries.json` and
+  `dotdone_tasks.json`. Read-compatibility with old data is required — see `resolveColor()`
+  and its legacy handling. **A schema change that cannot read yesterday's file loses the
+  user's history, and there is no backup path.**
+- **The boundaries in "What This Is Not", above.**
+
+## Primary intent
+
+Ship the app aggressively minimal. Every addition is tested against one question: *does this
+survive the canon?* The roadmap through v1.3 is reminders, then export, then the widget —
+**that sequence is fixed and does not get reordered without a new decision entry.**
+
+**Release discipline:** a feature set that is code-complete is not a release. v1.1 was held
+until Apple decided on v1.0, deliberately — two Guideline 4.2 rejections mean releases have
+to read as substantive, and stacking an unreviewed release on an unreviewed release is how a
+third one happens.
+
 ## Source of truth
 
 The GitHub repository is canonical: `filippos-swg/dotdone`. **It is public.**

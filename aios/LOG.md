@@ -7,6 +7,26 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-07-31 — Repairing what the migration broke, and recovering what it deleted
+**Status:** RECOMMENDED
+**Decision:** The v2 migration left every open task with an unsatisfiable completion criterion and deleted reasoning that was never carried anywhere. Both are repaired.
+
+**What was broken.** All three open tasks instructed a session to read the brief and the project canon, and required updating the changelog and the handoff, as a Done-When item. **The migration deleted all four of those files an hour earlier.** TASK_004 additionally said to log decisions in the old decision file. Thirteen broken instructions across three files. They now read `aios/STATE.md` first, then `aios/CANON.md`, then `aios/LOG.md`, and their Done-When item is a log entry plus a regenerated surface.
+
+**What was recovered, and why it was worth going back for.** The deleted handoff carried two blocks that were **canon wearing a state file's clothes** — they changed only on a decision, and they were living in a document rewritten every session:
+- **What must not be touched** — the Home tap/hold mechanic is final; the storage filenames and JSON shapes require read-compatibility, because *a schema change that cannot read yesterday's file loses the user's history and there is no backup path*; and the canon's own boundaries.
+- **Primary intent**, including the release discipline that this log cited and could no longer resolve: **a code-complete feature set is not a release.** v1.1 was held until Apple ruled on v1.0 deliberately, because two Guideline 4.2 rejections mean stacking an unreviewed release on an unreviewed release is how a third one happens.
+
+Both are now in `aios/CANON.md`. **That constraint was one commit from being unrecoverable by anyone who did not know to look in git**, and TASK_002 changes the storage schema — it is the exact task the read-compatibility rule exists to constrain.
+
+**One duplicate removed.** The verbatim merge of the two v1.3 files left **two terminal markers**, one at the old decision log's boundary and one at the end. A session appending at the first would have buried its entry mid-file. One marker now, and it points at the top, which is where entries actually go.
+
+**Evidence:** `aios/tasks/TASK_002.md`, `TASK_003.md`, `TASK_004.md`; `aios/CANON.md` sections *What must not be touched* and *Primary intent*, recovered from `dd3d7d9^`. `aios check` 13 E → 0.
+
+**How this was found:** not by the checker, which reported PASS, and not by review. A cold session with no context was pointed at this repo and asked what was true. **It found all of it in five minutes.** That test now runs after every migration.
+
+**Still unknowable from this repository, and stated rather than guessed:** whether the v1.1 build was ever submitted, and what Apple said. Thirteen days of silence followed the build starting. **It gates TASK_004 and it is a question for Filippos, not for the filesystem.**
+
 ## 2026-07-31 — Migrated to AiOS v2.0
 **Status:** RECOMMENDED
 **Decision:** `Profile: build`, `Visibility: public`. `PROJECT_CANON.md` becomes `aios/CANON.md` and absorbs the brief's durable half — audience, problem, scope boundary, standing constraints, standing risks. `DECISIONS.md` and `CHANGELOG.md` merge into this file verbatim, newest first. `AI_HANDOFF.md` is **deleted**, replaced by generated `aios/STATE.md`.
@@ -118,7 +138,6 @@ Any schema change must read old JSON gracefully (see `resolveColor()` normalisin
 
 ---
 
-*Add new decisions above this line. Most recent first.*
 
 ## 2026-07-18 — v1.0 APPROVED AND LIVE on the App Store
 ### Notes
@@ -217,5 +236,5 @@ Key constraints discovered: no AsyncStorage (native module null), no useFonts ho
 
 ---
 
-*Add new entries above this line.*
+*Add new entries at the TOP of this file, under the vocabulary header. Newest first.*
 
