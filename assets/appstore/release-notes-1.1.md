@@ -15,7 +15,7 @@ Add dots straight from the calendar.
 ## Submission steps (from Terminal)
 
 ```bash
-cd ~/Documents/Projects/dotdone
+cd ~/Projects/dotdone
 eas build --platform ios --profile production
 # wait for build to finish, then:
 eas submit --platform ios --latest
