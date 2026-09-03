@@ -22,3 +22,8 @@ government identifiers, no credentials — write the pointer, not the payload.
 | The live unit of work | `aios/tasks/` |
 
 Build and submission run through EAS. The owner completes App Store submission by hand.
+
+## Asset storage rule (universal)
+Original heavy assets (full-res PNGs, PSDs, video, audio masters) are NEVER committed to this repo.
+They live on the Mac at ~/Pictures/projects-images/dotdone/ — create the folder on first use.
+The repo only carries web-optimized delivery copies. Before committing any image, put the original in the vault first.
