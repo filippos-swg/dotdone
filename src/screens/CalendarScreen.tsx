@@ -35,6 +35,7 @@ import {
   generateId,
 } from '../utils/dateUtils';
 import TaskPalette, { PaletteItem } from '../components/TaskPalette';
+import { syncReminders } from '../utils/notifications';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calendar'>;
 
@@ -91,6 +92,7 @@ export default function CalendarScreen({ navigation, route }: Props) {
     };
     try {
       await addEntry(entry);
+      syncReminders();
       await loadData();
     } catch (err) {
       Alert.alert('SAVE ERROR', String(err));
@@ -143,6 +145,7 @@ export default function CalendarScreen({ navigation, route }: Props) {
           style: 'destructive',
           onPress: async () => {
             await deleteEntry(entry.id);
+            syncReminders();
             await loadData();
           },
         },

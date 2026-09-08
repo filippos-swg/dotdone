@@ -30,13 +30,20 @@ export async function saveTasks(tasks: DotTask[]): Promise<void> {
   await writeJSON(TASKS_FILE, normalised);
 }
 
-export async function addTask(name: string, color: string): Promise<DotTask> {
+export type TaskReminderFields = Pick<DotTask, 'reminderEnabled' | 'reminderTime'>;
+
+export async function addTask(
+  name: string,
+  color: string,
+  reminder: TaskReminderFields = {}
+): Promise<DotTask> {
   const all = await getAllTasks();
   const task: DotTask = {
     id: generateId(),
     name,
     color,
     order: all.length,
+    ...reminder,
   };
   all.push(task);
   await writeJSON(TASKS_FILE, all);

@@ -18,6 +18,7 @@ import { getAllTasks } from '../storage/tasks';
 import { DotEntry } from '../types';
 import { todayString, generateId } from '../utils/dateUtils';
 import TaskPalette, { PaletteItem } from '../components/TaskPalette';
+import { syncReminders } from '../utils/notifications';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -50,6 +51,7 @@ export default function HomeScreen({ navigation }: Props) {
       taskId,
     };
     await addEntry(entry);
+    syncReminders(); // a dot made today silences today's reminder for that task
     navigation.navigate('Calendar', {});
   };
 

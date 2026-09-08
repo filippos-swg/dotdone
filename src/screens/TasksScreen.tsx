@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { RootStackParamList, DotTask } from '../types';
 import {
   getAllTasks,
@@ -22,6 +23,14 @@ import {
   deleteTask,
 } from '../storage/tasks';
 import { TASK_COLORS } from '../utils/colors';
+import {
+  DEFAULT_REMINDER_TIME,
+  requestReminderPermission,
+  syncReminders,
+  formatReminderTime,
+  reminderTimeToDate,
+  dateToReminderTime,
+} from '../utils/notifications';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Tasks'>;
 
@@ -37,6 +46,9 @@ export default function TasksScreen({ navigation }: Props) {
   const [editingTask, setEditingTask] = useState<DotTask | null>(null);
   const [nameInput, setNameInput] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  const [reminderOn, setReminderOn] = useState(false);
+  const [reminderTime, setReminderTime] = useState(DEFAULT_REMINDER_TIME);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -56,6 +68,9 @@ export default function TasksScreen({ navigation }: Props) {
     setEditingTask(null);
     setNameInput('');
     setSelectedColor('');
+    setReminderOn(false);
+    setReminderTime(DEFAULT_REMINDER_TIME);
+    setShowTimePicker(false);
     setFormMode('add');
   };
 
@@ -63,6 +78,9 @@ export default function TasksScreen({ navigation }: Props) {
     setEditingTask(task);
     setNameInput(task.name);
     setSelectedColor(task.color);
+    setReminderOn(task.reminderEnabled === true);
+    setReminderTime(task.reminderTime ?? DEFAULT_REMINDER_TIME);
+    setShowTimePicker(false);
     setFormMode('edit');
   };
 
@@ -71,6 +89,30 @@ export default function TasksScreen({ navigation }: Props) {
     setEditingTask(null);
     setNameInput('');
     setSelectedColor('');
+    setReminderOn(false);
+    setReminderTime(DEFAULT_REMINDER_TIME);
+    setShowTimePicker(false);
+  };
+
+  // ── Reminder ──────────────────────────────────────────────────────────────────
+
+  const handleToggleReminder = async () => {
+    if (reminderOn) {
+      setReminderOn(false);
+      setShowTimePicker(false);
+      return;
+    }
+    // Permission is asked for here, on first enable, and never at launch.
+    // A refusal simply leaves the switch off.
+    const granted = await requestReminderPermission();
+    if (!granted) return;
+    setReminderOn(true);
+  };
+
+  const handleTimeChange = (event: DateTimePickerEvent, date?: Date) => {
+    if (Platform.OS !== 'ios') setShowTimePicker(false);
+    if (event.type === 'dismissed' || !date) return;
+    setReminderTime(dateToReminderTime(date));
   };
 
   const handleSave = async () => {
@@ -84,13 +126,15 @@ export default function TasksScreen({ navigation }: Props) {
       return;
     }
 
+    const reminder = { reminderEnabled: reminderOn, reminderTime };
     if (formMode === 'add') {
-      await addTask(trimmed, selectedColor);
+      await addTask(trimmed, selectedColor, reminder);
     } else if (formMode === 'edit' && editingTask) {
-      await updateTask({ ...editingTask, name: trimmed, color: selectedColor });
+      await updateTask({ ...editingTask, name: trimmed, color: selectedColor, ...reminder });
     }
     closeForm();
     await loadTasks();
+    syncReminders();
   };
 
   const handleDelete = (task: DotTask) => {
@@ -106,6 +150,7 @@ export default function TasksScreen({ navigation }: Props) {
             await deleteTask(task.id);
             closeForm();
             await loadTasks();
+            syncReminders();
           },
         },
       ]
@@ -168,6 +213,11 @@ export default function TasksScreen({ navigation }: Props) {
               activeOpacity={0.7}
             >
               <Text style={styles.taskName}>{task.name}</Text>
+              {task.reminderEnabled === true && (
+                <Text style={styles.taskReminderHint}>
+                  {formatReminderTime(task.reminderTime)}
+                </Text>
+              )}
             </TouchableOpacity>
             <View style={styles.taskActions}>
               <TouchableOpacity
@@ -228,6 +278,53 @@ export default function TasksScreen({ navigation }: Props) {
                 );
               })}
             </View>
+
+            {/* Reminder */}
+            <View style={styles.reminderRow}>
+              <Text style={styles.reminderLabel}>DAILY REMINDER</Text>
+              <TouchableOpacity
+                style={[styles.switchTrack, reminderOn && styles.switchTrackOn]}
+                onPress={handleToggleReminder}
+                activeOpacity={0.7}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                accessibilityRole="switch"
+                accessibilityState={{ checked: reminderOn }}
+                accessibilityLabel="Daily reminder"
+              >
+                <View style={[styles.switchKnob, reminderOn && styles.switchKnobOn]} />
+              </TouchableOpacity>
+            </View>
+
+            {reminderOn && (
+              <>
+                <View style={styles.reminderRow}>
+                  <Text style={styles.reminderSub}>EVERY DAY AT</Text>
+                  <TouchableOpacity
+                    onPress={() => setShowTimePicker(v => !v)}
+                    activeOpacity={0.6}
+                    hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
+                  >
+                    <Text style={[styles.reminderTime, showTimePicker && styles.reminderTimeActive]}>
+                      {formatReminderTime(reminderTime)}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                {showTimePicker && (
+                  <DateTimePicker
+                    value={reminderTimeToDate(reminderTime)}
+                    mode="time"
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    onChange={handleTimeChange}
+                    textColor="#000"
+                    themeVariant="light"
+                    style={styles.timePicker}
+                  />
+                )}
+                <Text style={styles.reminderNote}>
+                  QUIET ON DAYS YOU'VE ALREADY MADE THE DOT.
+                </Text>
+              </>
+            )}
 
             {/* Form buttons */}
             <View style={styles.formButtons}>
@@ -328,11 +425,16 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     marginRight: 14,
   },
-  taskNameBtn: { flex: 1 },
+  taskNameBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 },
   taskName: {
     fontFamily: FONT,
     fontSize: 13,
     color: '#000',
+  },
+  taskReminderHint: {
+    fontFamily: FONT,
+    fontSize: 10,
+    color: '#999',
   },
   taskActions: {
     flexDirection: 'row',
@@ -403,10 +505,73 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '700',
   },
+  reminderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+  reminderLabel: {
+    fontFamily: FONT,
+    fontSize: 13,
+    color: '#000',
+  },
+  reminderSub: {
+    fontFamily: FONT,
+    fontSize: 11,
+    color: '#666',
+    letterSpacing: 0.5,
+  },
+  reminderTime: {
+    fontFamily: FONT,
+    fontSize: 18,
+    color: '#000',
+  },
+  reminderTimeActive: {
+    textDecorationLine: 'underline',
+  },
+  reminderNote: {
+    fontFamily: FONT,
+    fontSize: 9,
+    color: '#999',
+    letterSpacing: 0.5,
+    marginTop: 4,
+    marginBottom: 12,
+  },
+  timePicker: {
+    alignSelf: 'center',
+    height: 150,
+    marginVertical: 4,
+  },
+  switchTrack: {
+    width: 40,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 1,
+    borderColor: '#000',
+    padding: 3,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: '#fff',
+  },
+  switchTrackOn: {
+    backgroundColor: '#000',
+    alignItems: 'flex-end',
+  },
+  switchKnob: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: '#000',
+  },
+  switchKnobOn: {
+    backgroundColor: '#fff',
+  },
   formButtons: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     gap: 12,
+    marginTop: 12,
     marginBottom: 20,
   },
   deleteBtn: {
