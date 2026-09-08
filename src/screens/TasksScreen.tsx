@@ -31,6 +31,7 @@ import {
   reminderTimeToDate,
   dateToReminderTime,
 } from '../utils/notifications';
+import { exportData } from '../utils/exportData';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Tasks'>;
 
@@ -171,6 +172,19 @@ export default function TasksScreen({ navigation }: Props) {
     [reordered[index], reordered[index + 1]] = [reordered[index + 1], reordered[index]];
     setTasks(reordered);
     await saveTasks(reordered);
+  };
+
+  // ── Export ────────────────────────────────────────────────────────────────────
+
+  const handleExport = async () => {
+    try {
+      const result = await exportData();
+      if (result === 'unavailable') {
+        Alert.alert('EXPORT UNAVAILABLE', 'THIS DEVICE HAS NO SHARE SHEET.');
+      }
+    } catch (err) {
+      Alert.alert('EXPORT ERROR', String(err));
+    }
   };
 
   // ── Color picker ──────────────────────────────────────────────────────────────
@@ -344,6 +358,18 @@ export default function TasksScreen({ navigation }: Props) {
               </TouchableOpacity>
             </View>
           </View>
+        )}
+
+        {/* ── Export ───────────────────────────────────────────────────────── */}
+        {formMode === 'none' && (
+          <TouchableOpacity
+            style={styles.exportRow}
+            onPress={handleExport}
+            activeOpacity={0.6}
+            hitSlop={{ top: 8, bottom: 8, left: 16, right: 16 }}
+          >
+            <Text style={styles.exportText}>EXPORT DATA</Text>
+          </TouchableOpacity>
         )}
       </ScrollView>
 
@@ -610,6 +636,19 @@ const styles = StyleSheet.create({
     fontFamily: FONT,
     fontSize: 11,
     color: '#000',
+  },
+
+  // ── Export ───────────────────────────────────────────────────────────────────
+  exportRow: {
+    alignItems: 'center',
+    paddingVertical: 14,
+    marginTop: 40,
+  },
+  exportText: {
+    fontFamily: FONT,
+    fontSize: 10,
+    color: '#999',
+    letterSpacing: 1,
   },
 
   // ── Footer ───────────────────────────────────────────────────────────────────
