@@ -7,12 +7,18 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — Build 9 ready for internal testing
+### Validation
+Apple finished processing [build 2.0.0 (9)](https://appstoreconnect.apple.com/teams/460fc214-6895-4781-b4d4-a21105caeef7/apps/6767492017/testflight/ios/54f71fef-ec82-4651-8e1f-9f2cef7f89e5). App Store Connect shows the new listing title, the existing Team (Expo) internal group with one tester, and saved build-specific notes for the Calendar count, dialogs, colored-task creation, icon label, history, reminders, widget, and export. The signed IPA declares `Dot It` as its icon display name. Device behavior is still unverified; the v2 App Store version is a draft and has not been submitted for review. Inherited preview screenshots still include the old Home title and must be replaced with authentic updated captures before public release.
+
+---
+
 ## 2026-10-07 — Dot It listing and TestFlight flow polish
 **Status:** APPROVED
 
 **Evidence:** Filippos selected `Dot It: Simple Habit Log` as the App Store title and requested removal of the old name from visible copy. His TestFlight screenshots showed system-style delete and color-required alerts, an empty Calendar day with the action far below it, and difficulty finding colored-task creation.
 
-**Practical consequence:** App Store Connect saved the new listing name, while the installed app display name stays `Dot It` and the bundle ID and old storage filenames stay intact. The Calendar now keeps its add action in the empty day and stays on Calendar after logging. Delete and task-form dialogs use NDot47 and the app's black-and-white buttons. My Tasks exposes `ADD A COLORED TASK`; the task picker still offers `NEW TASK & COLOR`. The JSON export's visible filename uses `dot-it-`. Public support and privacy copy omit the former title. Signed [build 9](https://expo.dev/accounts/fliphq/projects/dotdone/builds/18fd9225-da96-46a6-acbe-c4ff8daac521) compiled after TypeScript, four data tests, and an iOS Metro export passed; its [TestFlight upload](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/f885bd1d-3431-4804-b08c-684bc35e6826) and on-device review are pending. Version 2 remains a draft, not an App Review submission.
+**Practical consequence:** App Store Connect saved the new listing name, while the installed app display name stays `Dot It` and the bundle ID and old storage filenames stay intact. The Calendar now keeps its add action in the empty day and stays on Calendar after logging. Delete and task-form dialogs use NDot47 and the app's black-and-white buttons. My Tasks exposes `ADD A COLORED TASK`; the task picker still offers `NEW TASK & COLOR`. The JSON export's visible filename uses `dot-it-`. Public support and privacy copy omit the former title. Signed [build 9](https://expo.dev/accounts/fliphq/projects/dotdone/builds/18fd9225-da96-46a6-acbe-c4ff8daac521) compiled after TypeScript, four data tests, and an iOS Metro export passed, and [uploaded successfully](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/f885bd1d-3431-4804-b08c-684bc35e6826). Apple processing and on-device review remain pending. The signed IPA declares `CFBundleDisplayName` as `Dot It` and build number 9. Version 2 remains a draft, not an App Review submission.
 
 ---
 
