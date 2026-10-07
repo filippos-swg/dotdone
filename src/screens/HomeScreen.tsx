@@ -18,6 +18,7 @@ import { getAllTasks } from '../storage/tasks';
 import { DotEntry } from '../types';
 import { todayString, generateId } from '../utils/dateUtils';
 import TaskPalette, { PaletteItem } from '../components/TaskPalette';
+import { TaskPreset, getOrCreatePresetTask } from '../utils/taskPresets';
 import { syncReminders } from '../utils/notifications';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -32,6 +33,7 @@ export default function HomeScreen({ navigation, route }: Props) {
   const [showPalette, setShowPalette] = useState(false);
   const [tasks, setTasks] = useState<DotTask[]>([]);
   const longPressTriggered = useRef(false);
+  const creatingPreset = useRef(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -123,6 +125,21 @@ export default function HomeScreen({ navigation, route }: Props) {
     );
   };
 
+  const handleSelectPreset = async (preset: TaskPreset) => {
+    if (creatingPreset.current) return;
+    creatingPreset.current = true;
+    setShowPalette(false);
+    try {
+      const task = await getOrCreatePresetTask(preset);
+      setTasks(await getAllTasks());
+      await attemptSave(task.name, task.color, task.id);
+    } catch (err) {
+      Alert.alert('TASK NOT ADDED', String(err));
+    } finally {
+      creatingPreset.current = false;
+    }
+  };
+
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
@@ -190,6 +207,7 @@ export default function HomeScreen({ navigation, route }: Props) {
         visible={showPalette}
         tasks={tasks}
         onSelect={handleSelectTask}
+        onSelectPreset={handleSelectPreset}
         onCreateTask={() => {
           setShowPalette(false);
           navigation.navigate('Tasks', { createFor: 'Home' });

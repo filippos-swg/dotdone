@@ -7,6 +7,15 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — Ready-made colored tasks and v2 launch filing
+**Status:** APPROVED
+
+**Evidence:** Filippos asked for a stronger Dot It link in the Calendar footer and ready-made brown Garbage, blue Pills, and pink Call Mom tasks. He accepted yellow Water Plants and orange Go Outside too, and authorized building the changes and filing version 2 for launch.
+
+**Practical consequence:** The task picker offers these five named colors without changing existing tasks or history. Choosing one creates the task if needed and records its first dot. Calendar's Dot It link is larger and underlined. The existing App Store app record and local storage remain in place. App Store Connect's new listing name is saved, while the iPhone TestFlight page still shows the previous approved version's title; this needs a final phone check. The v2 draft still has build 5 and old screenshots, which must be replaced before review submission.
+
+---
+
 ## 2026-10-07 — Build 9 ready for internal testing
 ### Validation
 Apple finished processing [build 2.0.0 (9)](https://appstoreconnect.apple.com/teams/460fc214-6895-4781-b4d4-a21105caeef7/apps/6767492017/testflight/ios/54f71fef-ec82-4651-8e1f-9f2cef7f89e5). App Store Connect shows the new listing title, the existing Team (Expo) internal group with one tester, and saved build-specific notes for the Calendar count, dialogs, colored-task creation, icon label, history, reminders, widget, and export. The signed IPA declares `Dot It` as its icon display name. Device behavior is still unverified; the v2 App Store version is a draft and has not been submitted for review. Inherited preview screenshots still include the old Home title and must be replaced with authentic updated captures before public release.

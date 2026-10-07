@@ -35,6 +35,7 @@ import {
   generateId,
 } from '../utils/dateUtils';
 import TaskPalette, { PaletteItem } from '../components/TaskPalette';
+import { TaskPreset, getOrCreatePresetTask } from '../utils/taskPresets';
 import DotDialog, { DotDialogConfig } from '../components/DotDialog';
 import { syncReminders } from '../utils/notifications';
 import { hasRecentDot } from '../utils/recentDot';
@@ -61,6 +62,7 @@ export default function CalendarScreen({ navigation, route }: Props) {
   const [dialog, setDialog] = useState<DotDialogConfig | null>(null);
   const [tasks, setTasks] = useState<DotTask[]>([]);
   const savingDot = useRef(false);
+  const creatingPreset = useRef(false);
 
   // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -144,6 +146,21 @@ export default function CalendarScreen({ navigation, route }: Props) {
       Alert.alert('SAVE ERROR', String(err));
     } finally {
       savingDot.current = false;
+    }
+  };
+
+  const handleSelectPreset = async (preset: TaskPreset) => {
+    if (creatingPreset.current) return;
+    creatingPreset.current = true;
+    setShowPalette(false);
+    try {
+      const task = await getOrCreatePresetTask(preset);
+      setTasks(await getAllTasks());
+      await handleAddDot(task);
+    } catch (err) {
+      setDialog({ title: 'TASK NOT ADDED', message: String(err), actions: [{ label: 'OK', appearance: 'solid' }] });
+    } finally {
+      creatingPreset.current = false;
     }
   };
 
@@ -430,7 +447,7 @@ export default function CalendarScreen({ navigation, route }: Props) {
             onPress={() => navigation.navigate('Home')}
             activeOpacity={0.6}
           >
-            <Text style={styles.footerBtnText}>DOT IT</Text>
+            <Text style={[styles.footerBtnText, styles.dotItFooterText]}>DOT IT</Text>
           </TouchableOpacity>
         </View>
 
@@ -449,6 +466,7 @@ export default function CalendarScreen({ navigation, route }: Props) {
         visible={showPalette}
         tasks={tasks}
         onSelect={handleAddDot}
+        onSelectPreset={handleSelectPreset}
         onCreateTask={() => {
           setShowPalette(false);
           navigation.navigate('Tasks', { createFor: 'Calendar', returnDate: selectedDate });
@@ -664,5 +682,9 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#000',
     letterSpacing: 0.5,
+  },
+  dotItFooterText: {
+    fontSize: 14,
+    textDecorationLine: 'underline',
   },
 });

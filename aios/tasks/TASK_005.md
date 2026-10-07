@@ -1,6 +1,6 @@
 # TASK 005 — TestFlight Calendar logging and flow
 
-**Status:** Build 9 ready in the internal TestFlight group; device retest pending
+**Status:** Build 10 in preparation; final device and store review pending
 **Owner:** AI with Filippos device review
 **Branch:** feature/dot-it-v2
 **Last updated:** 2026-10-07
@@ -44,7 +44,12 @@ During 2.0.0 (5) TestFlight testing, Filippos reported four saved dots after mak
 - [x] Signed 2.0.0 (9) production build compiles.
 - [x] Signed 2.0.0 (9) uploaded to the existing App Store Connect app.
 - [x] New signed build reaches the internal TestFlight group with focused notes.
+- [x] Calendar Dot It footer is larger and underlined.
+- [x] Task picker offers five ready-made colored tasks, reusing any existing task with the same name.
+- [x] TypeScript, focused data tests, and iOS Metro export pass after the ready-made task change.
 - [ ] Owner verifies two deliberate Calendar actions make exactly two entries.
-- [ ] Owner verifies TestFlight title and installed icon label on device.
+- [ ] Owner verifies final build's TestFlight title and installed icon label on device. Build 9 TestFlight still showed the old approved title despite the saved App Store Connect name.
 - [ ] Replace inherited preview screenshots that still show the old Home title with authentic captures from the updated app before public release.
 - [ ] New task creation, deletion, navigation, and history are verified on an iPhone.
+- [ ] Final signed build replaces build 5 in the App Store version draft and passes Apple processing.
+- [ ] Submit version 2 to App Review after final screenshots and metadata are current.
