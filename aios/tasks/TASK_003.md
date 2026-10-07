@@ -1,10 +1,10 @@
-# TASK 003 — Data Export via Share Sheet (v1.2)
+# TASK 003 — Data Export via Share Sheet (Dot It v2)
 
-**Status:** Not started (sequenced after TASK_002)
+**Status:** Implemented on feature/dot-it-v2; device verification pending
 **Owner:** AI (Claude session) with Filippos review
 **Reviewer:** Filippos
-**Branch:** task/003-data-export
-**Last updated:** 2026-07-18
+**Branch:** feature/dot-it-v2
+**Last updated:** 2026-10-07
 
 ---
 
@@ -37,9 +37,9 @@ All data is local by design (canon). That also means one lost or reset phone era
 
 ## Done When
 
-- [ ] Export produces one valid JSON with all tasks and entries
+- [x] Export produces one versioned JSON with all tasks and entries (code path; device test pending)
 - [ ] Share sheet opens and file transfers via AirDrop and Files
-- [ ] Zero-data state handled (exports empty arrays, doesn't crash)
+- [x] Zero-data state handled in code (exports empty arrays)
 - [ ] Tested on device
 - [ ] Decision or change entry written in `aios/LOG.md`; `aios/STATE.md` regenerated at close
 - [ ] Human review complete

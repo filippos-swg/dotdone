@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Alert,
   StatusBar,
+  AppState,
+  ScrollView,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -14,8 +16,6 @@ import {
   getAllEntries,
   addEntry,
   deleteEntry,
-  hasDeleteHintBeenSeen,
-  markDeleteHintSeen,
 } from '../storage/entries';
 import { getAllTasks } from '../storage/tasks';
 import { DotEntry, DotTask } from '../types';
@@ -35,11 +35,16 @@ import {
   generateId,
 } from '../utils/dateUtils';
 import TaskPalette, { PaletteItem } from '../components/TaskPalette';
+import { TaskPreset, getOrCreatePresetTask } from '../utils/taskPresets';
+import DotDialog, { DotDialogConfig } from '../components/DotDialog';
+import { syncReminders } from '../utils/notifications';
+import { hasRecentDot } from '../utils/recentDot';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calendar'>;
 
 const FONT = 'NDot47';
 const DAY_HEADERS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const RECENT_THRESHOLD_MS = 5000;
 
 // Normalise legacy 'black' string to hex
 function resolveColor(color: string): string {
@@ -53,47 +58,109 @@ export default function CalendarScreen({ navigation, route }: Props) {
   const [calendarAnchor, setCalendarAnchor] = useState(initialDate);
   const [viewMode, setViewMode] = useState<'week' | 'month'>('week');
   const [allEntries, setAllEntries] = useState<DotEntry[]>([]);
-  const [showHint, setShowHint] = useState(false);
   const [showPalette, setShowPalette] = useState(false);
+  const [dialog, setDialog] = useState<DotDialogConfig | null>(null);
   const [tasks, setTasks] = useState<DotTask[]>([]);
+  const savingDot = useRef(false);
+  const creatingPreset = useRef(false);
 
   // ── Data ─────────────────────────────────────────────────────────────────────
 
   useFocusEffect(
     useCallback(() => {
-      loadData();
-    }, [])
+      const focusDate = route.params?.initialDate ?? todayString();
+      setSelectedDate(focusDate);
+      setCalendarAnchor(focusDate);
+      loadData().then(() => {
+        if (route.params?.reopenPalette) {
+          setShowPalette(true);
+          navigation.setParams({ reopenPalette: undefined });
+        }
+      }).catch(err => Alert.alert('LOAD ERROR', String(err)));
+    }, [navigation, route.params?.initialDate, route.params?.reopenPalette])
   );
+
+  // A widget can add a dot while this screen remains mounted in the background.
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', state => {
+      if (state === 'active') loadData().catch(err => Alert.alert('LOAD ERROR', String(err)));
+    });
+    return () => subscription.remove();
+  }, []);
 
   const loadData = async () => {
     const entries = await getAllEntries();
     setAllEntries(entries);
     const allTasks = await getAllTasks();
     setTasks(allTasks);
-    const seen = await hasDeleteHintBeenSeen();
-    if (!seen && entries.length > 0) {
-      setShowHint(true);
-      await markDeleteHintSeen();
-    }
   };
 
   // ── Add dot on selected day ──────────────────────────────────────────────────
 
-  const handleAddDot = async (item: PaletteItem) => {
-    setShowPalette(false);
+  const saveDot = async (item: PaletteItem, date: string) => {
     const entry: DotEntry = {
       id: generateId(),
-      date: selectedDate,
+      date,
       timestamp: new Date().toISOString(),
       actionName: item.name === 'DEFAULT' ? 'Default' : item.name,
       color: item.color,
       taskId: item.id === 'default' ? undefined : item.id,
     };
+    await addEntry(entry);
+    syncReminders();
+    await loadData();
+  };
+
+  const handleAddDot = async (item: PaletteItem) => {
+    if (savingDot.current) return;
+    savingDot.current = true;
+    setShowPalette(false);
+    const date = selectedDate;
     try {
-      await addEntry(entry);
-      await loadData();
+      const taskId = item.id === 'default' ? undefined : item.id;
+      const entries = await getAllEntries();
+      const now = Date.now();
+      const recentlyAdded = hasRecentDot(entries, date, taskId, now, RECENT_THRESHOLD_MS);
+      if (recentlyAdded) {
+        Alert.alert(
+          'HOLD ON',
+          'YOU JUST ADDED THIS DOT. ADD ANOTHER?',
+          [
+            { text: 'NO', style: 'cancel' },
+            {
+              text: 'YES',
+              onPress: () => {
+                if (savingDot.current) return;
+                savingDot.current = true;
+                saveDot(item, date)
+                  .catch(err => Alert.alert('SAVE ERROR', String(err)))
+                  .finally(() => { savingDot.current = false; });
+              },
+            },
+          ]
+        );
+        return;
+      }
+      await saveDot(item, date);
     } catch (err) {
       Alert.alert('SAVE ERROR', String(err));
+    } finally {
+      savingDot.current = false;
+    }
+  };
+
+  const handleSelectPreset = async (preset: TaskPreset) => {
+    if (creatingPreset.current) return;
+    creatingPreset.current = true;
+    setShowPalette(false);
+    try {
+      const task = await getOrCreatePresetTask(preset);
+      setTasks(await getAllTasks());
+      await handleAddDot(task);
+    } catch (err) {
+      setDialog({ title: 'TASK NOT ADDED', message: String(err), actions: [{ label: 'OK', appearance: 'solid' }] });
+    } finally {
+      creatingPreset.current = false;
     }
   };
 
@@ -133,27 +200,37 @@ export default function CalendarScreen({ navigation, route }: Props) {
   // ── Handlers ──────────────────────────────────────────────────────────────────
 
   const handleLongPress = (entry: DotEntry) => {
-    Alert.alert(
-      'DELETE DOT',
-      `DELETE DOT AT ${formatTime(entry.timestamp)}?`,
-      [
-        { text: 'CANCEL', style: 'cancel' },
+    setDialog({
+      title: 'DELETE THIS DOT?',
+      message: `${entry.actionName === 'Default' ? 'DOT' : entry.actionName} AT ${formatTime(entry.timestamp)}`,
+      actions: [
+        { label: 'KEEP DOT', appearance: 'solid' },
         {
-          text: 'DELETE',
-          style: 'destructive',
-          onPress: async () => {
-            await deleteEntry(entry.id);
-            await loadData();
+          label: 'DELETE',
+          appearance: 'outline',
+          onPress: () => {
+            deleteEntry(entry.id)
+              .then(() => {
+                syncReminders();
+                return loadData();
+              })
+              .catch(err => setDialog({
+                title: 'DELETE FAILED',
+                message: String(err),
+                actions: [{ label: 'OK', appearance: 'solid' }],
+              }));
           },
         },
-      ]
-    );
+      ],
+    });
   };
 
   const handleCalendarNav = (dir: -1 | 1) => {
-    setCalendarAnchor(a =>
-      viewMode === 'week' ? addDays(a, dir * 7) : addMonths(a, dir)
-    );
+    const next = viewMode === 'week'
+      ? addDays(selectedDate, dir * 7)
+      : addMonths(selectedDate, dir);
+    setSelectedDate(next);
+    setCalendarAnchor(next);
   };
 
   const handleToggleView = () => {
@@ -202,32 +279,52 @@ export default function CalendarScreen({ navigation, route }: Props) {
         <Text style={styles.countLabel}>{countLabel}</Text>
 
         {/* Dot list */}
-        <View style={styles.dotList}>
-          {selectedEntries.map(entry => (
+        {dotCount === 0 ? (
+          <View style={styles.emptyActionArea}>
             <TouchableOpacity
-              key={entry.id}
-              style={styles.dotRow}
-              onLongPress={() => handleLongPress(entry)}
-              delayLongPress={500}
+              style={styles.makeDotBtn}
+              onPress={() => setShowPalette(true)}
               activeOpacity={0.7}
+              accessibilityRole="button"
             >
-              <View style={[styles.dotBullet, { backgroundColor: resolveColor(entry.color) }]} />
-              <View style={styles.dotInfo}>
-                {isBackfilled(entry) ? (
-                  <Text style={styles.addedLaterLabel}>ADDED LATER</Text>
-                ) : (
-                  <Text style={styles.timeLabel}>{formatTime(entry.timestamp)}</Text>
-                )}
-                {entry.actionName !== 'Default' && (
-                  <Text style={styles.taskNameLabel}>{entry.actionName}</Text>
-                )}
-              </View>
+              <Text style={styles.makeDotText}>
+                {selectedDate === todayString() ? 'MAKE A DOT' : 'ADD A DOT TO THIS DAY'}
+              </Text>
             </TouchableOpacity>
-          ))}
-        </View>
-
-        {showHint && dotCount > 0 && (
-          <Text style={styles.hintText}>LONG PRESS A DOT TO DELETE</Text>
+          </View>
+        ) : (
+          <ScrollView style={styles.dotList} contentContainerStyle={styles.dotListContent}>
+            {selectedEntries.map(entry => (
+            <View key={entry.id} style={styles.dotRow}>
+              <TouchableOpacity
+                style={styles.dotDetails}
+                onLongPress={() => handleLongPress(entry)}
+                delayLongPress={500}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.dotBullet, { backgroundColor: resolveColor(entry.color) }]} />
+                <View style={styles.dotInfo}>
+                  {isBackfilled(entry) ? (
+                    <Text style={styles.addedLaterLabel}>ADDED LATER</Text>
+                  ) : (
+                    <Text style={styles.timeLabel}>{formatTime(entry.timestamp)}</Text>
+                  )}
+                  {entry.actionName !== 'Default' && (
+                    <Text style={styles.taskNameLabel}>{entry.actionName}</Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteDotBtn}
+                onPress={() => handleLongPress(entry)}
+                accessibilityRole="button"
+                accessibilityLabel={`Delete ${entry.actionName} dot at ${formatTime(entry.timestamp)}`}
+              >
+                <Text style={styles.deleteDotText}>DELETE</Text>
+              </TouchableOpacity>
+            </View>
+            ))}
+          </ScrollView>
         )}
       </View>
 
@@ -281,7 +378,10 @@ export default function CalendarScreen({ navigation, route }: Props) {
                 <TouchableOpacity
                   key={di}
                   style={styles.calCellContainer}
-                  onPress={() => setSelectedDate(dateStr)}
+                  onPress={() => {
+                    setSelectedDate(dateStr);
+                    setCalendarAnchor(dateStr);
+                  }}
                   activeOpacity={0.6}
                 >
                   <Text style={[
@@ -315,8 +415,30 @@ export default function CalendarScreen({ navigation, route }: Props) {
             {viewMode === 'week' ? 'CHANGE TO MONTHLY VIEW' : 'CHANGE TO WEEKLY VIEW'}
           </Text>
         </TouchableOpacity>
+        {selectedDate !== todayString() && (
+          <TouchableOpacity style={styles.todayBtn} onPress={() => {
+            const today = todayString();
+            setSelectedDate(today);
+            setCalendarAnchor(today);
+          }}>
+            <Text style={styles.todayText}>BACK TO TODAY</Text>
+          </TouchableOpacity>
+        )}
 
       </View>
+
+      {dotCount > 0 && (
+        <TouchableOpacity
+          style={styles.makeDotBtn}
+          onPress={() => setShowPalette(true)}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+        >
+          <Text style={styles.makeDotText}>
+            {selectedDate !== todayString() ? 'ADD A DOT TO THIS DAY' : 'MAKE ANOTHER DOT'}
+          </Text>
+        </TouchableOpacity>
+      )}
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
       <View style={styles.footer}>
@@ -325,18 +447,7 @@ export default function CalendarScreen({ navigation, route }: Props) {
             onPress={() => navigation.navigate('Home')}
             activeOpacity={0.6}
           >
-            <Text style={styles.footerBtnText}>HOME</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.footerSlot}>
-          <TouchableOpacity
-            style={styles.addBtn}
-            onPress={() => setShowPalette(true)}
-            activeOpacity={0.7}
-          >
-            <View style={styles.plusH} />
-            <View style={styles.plusV} />
+            <Text style={[styles.footerBtnText, styles.dotItFooterText]}>DOT IT</Text>
           </TouchableOpacity>
         </View>
 
@@ -355,8 +466,14 @@ export default function CalendarScreen({ navigation, route }: Props) {
         visible={showPalette}
         tasks={tasks}
         onSelect={handleAddDot}
+        onSelectPreset={handleSelectPreset}
+        onCreateTask={() => {
+          setShowPalette(false);
+          navigation.navigate('Tasks', { createFor: 'Calendar', returnDate: selectedDate });
+        }}
         onClose={() => setShowPalette(false)}
       />
+      <DotDialog config={dialog} onClose={() => setDialog(null)} />
 
     </View>
   );
@@ -411,14 +528,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   dotList: {
+    flex: 1,
     width: '100%',
     paddingHorizontal: 52,
+  },
+  dotListContent: { paddingBottom: 8 },
+  emptyActionArea: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
   },
   dotRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
   },
+  dotDetails: { flex: 1, flexDirection: 'row', alignItems: 'center', minHeight: 44 },
+  deleteDotBtn: { minWidth: 56, minHeight: 44, alignItems: 'flex-end', justifyContent: 'center' },
+  deleteDotText: { fontFamily: FONT, fontSize: 9, color: '#777' },
   dotBullet: {
     width: 22,
     height: 22,
@@ -446,12 +573,6 @@ const styles = StyleSheet.create({
     fontFamily: FONT,
     fontSize: 10,
     color: '#666',
-  },
-  hintText: {
-    fontFamily: FONT,
-    fontSize: 9,
-    color: '#999',
-    marginTop: 12,
   },
 
   // ── Bottom section ────────────────────────────────────────────────────────────
@@ -526,6 +647,24 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#000',
   },
+  todayBtn: { paddingVertical: 6 },
+  todayText: { fontFamily: FONT, fontSize: 10, color: '#000' },
+
+  makeDotBtn: {
+    alignSelf: 'stretch',
+    minHeight: 52,
+    marginHorizontal: 24,
+    marginBottom: 8,
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  makeDotText: {
+    fontFamily: FONT,
+    fontSize: 12,
+    color: '#fff',
+    textAlign: 'center',
+  },
 
   // ── Footer ────────────────────────────────────────────────────────────────────
   footer: {
@@ -544,26 +683,8 @@ const styles = StyleSheet.create({
     color: '#000',
     letterSpacing: 0.5,
   },
-  addBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  plusH: {
-    position: 'absolute',
-    width: 18,
-    height: 2,
-    backgroundColor: '#fff',
-    borderRadius: 1,
-  },
-  plusV: {
-    position: 'absolute',
-    width: 2,
-    height: 18,
-    backgroundColor: '#fff',
-    borderRadius: 1,
+  dotItFooterText: {
+    fontSize: 14,
+    textDecorationLine: 'underline',
   },
 });

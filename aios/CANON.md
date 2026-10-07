@@ -1,4 +1,4 @@
-# DotDone — Canon
+# Dot It (formerly DotDone) — Canon
 
 **Owner:** Filippos Arvanitakis
 
@@ -11,7 +11,7 @@ If a suggestion conflicts with this file, return here before proceeding.
 
 ## Identity
 
-DotDone is a one-tap habit log: tap to record a timestamped dot, see your dots on a calendar. Nothing else.
+Dot It is a one-tap habit log: tap to record a timestamped dot, see your dots on a calendar. Nothing else. The app's public name changed for v2; its bundle ID and historical storage filenames remain unchanged.
 
 ## Purpose
 
@@ -88,8 +88,8 @@ was rewritten every session.
 ## Primary intent
 
 Ship the app aggressively minimal. Every addition is tested against one question: *does this
-survive the canon?* The roadmap through v1.3 is reminders, then export, then the widget —
-**that sequence is fixed and does not get reordered without a new decision entry.**
+survive the canon?* The roadmap sequence is reminders, then export, then the widget. On
+2026-10-07 the owner grouped these into Dot It v2; see `aios/LOG.md`.
 
 **Release discipline:** a feature set that is code-complete is not a release. v1.1 was held
 until Apple decided on v1.0, deliberately — two Guideline 4.2 rejections mean releases have

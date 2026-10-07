@@ -1,9 +1,109 @@
-# DotDone — Decision & Change Log
+# Dot It — Decision & Change Log
 
 **Vocabulary.** An entry with a `**Status:**` is a decision. An entry without one is a change.
 `APPROVED` — Filippos has signed it · `RECOMMENDED` — awaiting his pass / adjust / kill · `OPEN` — undecided, needs work · `SUPERSEDED` — replaced, with a pointer to what replaced it.
 
 Newest first. Append only — never rewrite an entry. A correction is a new entry that supersedes the old one.
+
+---
+
+## 2026-10-07 — Existing named tasks can take a preset color
+**Status:** RECOMMENDED
+
+**Evidence:** The owner requested a brown Garbage preset, but already had a green Garbage task in TestFlight. The initial implementation hid the brown preset whenever a same-named task existed, so it could not satisfy that request on the owner's device.
+
+**Practical consequence:** The ready-made picker shows a preset when a same-named task uses a different color. Selecting it updates that task's color for future dots and records a dot, without replacing old dots or changing their historical colors. [Production build 11](https://expo.dev/accounts/fliphq/projects/dotdone/builds/173f3c84-9b4c-4336-a729-6e25ade738d8) compiled with this correction and was [scheduled for Apple upload](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/6f685eea-05c4-4b30-827e-64139dcbda49). The IPA declares `Dot It` for the app and widget; on-device behavior remains unverified. This supersedes the earlier entry's narrower statement that preset selection would never change an existing task.
+
+---
+
+## 2026-10-07 — Ready-made colored tasks and v2 launch filing
+**Status:** APPROVED
+
+**Evidence:** Filippos asked for a stronger Dot It link in the Calendar footer and ready-made brown Garbage, blue Pills, and pink Call Mom tasks. He accepted yellow Water Plants and orange Go Outside too, and authorized building the changes and filing version 2 for launch.
+
+**Practical consequence:** The task picker offers these five named colors without changing existing tasks or history. Choosing one creates the task if needed and records its first dot. Calendar's Dot It link is larger and underlined. The existing App Store app record and local storage remain in place. App Store Connect's new listing name is saved, while the iPhone TestFlight page still shows the previous approved version's title; this needs a final phone check. The v2 draft still has build 5 and old screenshots, which must be replaced before review submission.
+
+---
+
+## 2026-10-07 — Build 9 ready for internal testing
+### Validation
+Apple finished processing [build 2.0.0 (9)](https://appstoreconnect.apple.com/teams/460fc214-6895-4781-b4d4-a21105caeef7/apps/6767492017/testflight/ios/54f71fef-ec82-4651-8e1f-9f2cef7f89e5). App Store Connect shows the new listing title, the existing Team (Expo) internal group with one tester, and saved build-specific notes for the Calendar count, dialogs, colored-task creation, icon label, history, reminders, widget, and export. The signed IPA declares `Dot It` as its icon display name. Device behavior is still unverified; the v2 App Store version is a draft and has not been submitted for review. Inherited preview screenshots still include the old Home title and must be replaced with authentic updated captures before public release.
+
+---
+
+## 2026-10-07 — Dot It listing and TestFlight flow polish
+**Status:** APPROVED
+
+**Evidence:** Filippos selected `Dot It: Simple Habit Log` as the App Store title and requested removal of the old name from visible copy. His TestFlight screenshots showed system-style delete and color-required alerts, an empty Calendar day with the action far below it, and difficulty finding colored-task creation.
+
+**Practical consequence:** App Store Connect saved the new listing name, while the installed app display name stays `Dot It` and the bundle ID and old storage filenames stay intact. The Calendar now keeps its add action in the empty day and stays on Calendar after logging. Delete and task-form dialogs use NDot47 and the app's black-and-white buttons. My Tasks exposes `ADD A COLORED TASK`; the task picker still offers `NEW TASK & COLOR`. The JSON export's visible filename uses `dot-it-`. Public support and privacy copy omit the former title. Signed [build 9](https://expo.dev/accounts/fliphq/projects/dotdone/builds/18fd9225-da96-46a6-acbe-c4ff8daac521) compiled after TypeScript, four data tests, and an iOS Metro export passed, and [uploaded successfully](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/f885bd1d-3431-4804-b08c-684bc35e6826). Apple processing and on-device review remain pending. The signed IPA declares `CFBundleDisplayName` as `Dot It` and build number 9. Version 2 remains a draft, not an App Review submission.
+
+---
+
+## 2026-10-07 — Dot It readiness follow-up
+### Changes
+Calendar entries now have visible confirmed deletion and the list scrolls on busy days. Browsing an older date offers a Today shortcut. The task picker has a New Task & Color action; it opens the existing task form, then returns to the originating Home or Calendar picker after save or cancel. Task saves reject overlapping taps. The picker backdrop is separate from its controls so tapping a task cannot also activate backdrop dismissal.
+
+### Validation limit
+TypeScript, four focused data tests, and an iOS Metro export pass. Signed [build 2.0.0 (8)](https://expo.dev/accounts/fliphq/projects/dotdone/builds/7909cdb0-bdf7-436a-9af0-5bf60d72faee) compiled and was [uploaded to Apple](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/d78b8cc9-872d-4da3-9ae3-eef195205c79) for TestFlight processing. The exact source of the build 5 duplicate entries remains unproven; build 8 needs iPhone verification. The combined App Store listing name remains distinct from the binary display name. Version 2 is still a draft and has not been submitted for App Review.
+
+### TestFlight availability
+Apple finished processing [build 8](https://appstoreconnect.apple.com/teams/460fc214-6895-4781-b4d4-a21105caeef7/apps/6767492017/testflight/ios/ab1c7b24-6c32-4288-afe1-1650e97cfa43), assigned it to the existing one-tester Team (Expo) internal group, and saved build-specific checks for deletion, duplicate count, named colors, dates, icon label, history, export, reminders, and widget behavior.
+
+---
+
+## 2026-10-07 — Calendar build 7 is ready for internal testing
+### Validation
+App Store Connect finished processing 2.0.0 (7), attached it to the existing one-tester Team (Expo) internal group, and saved build-specific What to Test instructions covering duplicate counts, date navigation, named colors, history, reminders, export, and the widget. The app version 2.0.0 remains a draft and has not been submitted for App Review. Device behavior still awaits Filippos's retest.
+
+---
+
+## 2026-10-07 — Further flow changes after the Calendar retest
+**Status:** RECOMMENDED
+
+**Evidence:** The current TestFlight Calendar screenshot shows four identical minute-only rows, a large unused area, an unlabeled add control, and no visible delete action. Home and Tasks code show that creating a named, colored task still requires leaving the task picker and returning to log it.
+
+**Practical consequence if accepted:** Give each logged row a visible delete action; add a direct “New task + color” route from the task picker that returns to logging; add a Today shortcut when browsing older dates. Keep the Home one-tap/hold behavior and the app's minimal, local-only scope.
+
+---
+
+## 2026-10-07 — Calendar fix uploaded for TestFlight
+### Validation
+TypeScript, four unit tests, and an iOS Metro export passed. Signed production [build 2.0.0 (7)](https://expo.dev/accounts/fliphq/projects/dotdone/builds/5abf576a-58ea-4c3c-bfc1-ef3a2ff13e8b) finished and was [uploaded to App Store Connect](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/32bcbd42-3bc1-446e-83ca-6308cbc3acf2). Apple processing and the owner's on-device retest are pending. Build 6 also reached App Store Connect, but build 7 supersedes it for Calendar testing.
+
+---
+
+## 2026-10-07 — TestFlight Calendar feedback
+**Status:** APPROVED
+
+**Evidence:** Direct owner report, plus a current TestFlight screenshot showing four separate default-dot rows at 10:55 after two Calendar logging actions.
+
+**Practical consequence:** Calendar now ignores overlapping save callbacks and asks for confirmation before recording the same task twice within five seconds. Its anonymous footer + becomes a labeled Make a Dot / Make Another Dot action below the calendar, and its Home link is labeled Dot It. The date header follows the selected calendar day when browsing weeks or months and resets to today when the calendar is reopened. Home and Tasks copy now explain where named colors are created. A real-device retest remains required.
+
+### Diagnosis limit
+The exact event source is not yet proven; an iPhone retest is required before calling the bug closed.
+
+The 2.0.0 (5) IPA's `CFBundleDisplayName` is `Dot It` with no localized override, though the owner reports seeing the old combined name under the installed icon. The App Store Connect listing continues to use `DotDone — Dot It` because Apple rejected `Dot It` as already in use. The home-screen label discrepancy needs a device screenshot or refresh to resolve; no bundle ID or storage name was changed.
+
+---
+
+## 2026-10-07 — Dot It v2 signed build reaches App Store Connect
+### Validation
+EAS production build 2.0.0 (5) completed with separate main-app and widget provisioning profiles: https://expo.dev/accounts/fliphq/projects/dotdone/builds/2052688b-b6df-48e1-b524-8ec261a0bf9b. The existing App Store Connect app accepted the binary for TestFlight processing: https://expo.dev/accounts/fliphq/projects/dotdone/submissions/6d227ec9-21b0-4a0b-a70e-e3ed05b3cf29. App Store Connect showed v1.0 Ready for Distribution and no v2 review submission. Real-device tests, including widget reminder behavior, remain open. The submit profile now records the existing app ID for future noninteractive test uploads.
+
+## 2026-10-07 — Dot It v2 simulator build passes
+### Validation
+The final unsigned EAS iOS Simulator build, including the WidgetKit target and NDot47 font, completed successfully: https://expo.dev/accounts/fliphq/projects/dotdone/builds/c337a2b4-cda3-4b6b-9f99-10f4293c6cf6. TypeScript, Metro iOS export, two storage migration tests, Expo prebuild, and plist checks also passed. The signed build remains blocked on the new widget provisioning profile; real-device behavior has not been verified.
+
+---
+
+## 2026-10-07 — Dot It v2 name and scope
+**Status:** APPROVED
+**Decision:** Rename the existing app to “Dot It” for version 2 and use the previously approved roadmap: opt-in task reminders, JSON export, then the home-screen widget. Keep the existing App Store app record, bundle ID `se.southnorth.dotdone`, EAS project, and old JSON filenames so installed users retain their history.
+
+**Evidence:** Direct owner request and follow-up confirming “Use the existing roadmap.” The public App Store listing still showed v1.0 on this date; EAS showed a completed v1.1.0 build, but private App Store Connect status was unavailable.
+
+**Widget implementation assumption, awaiting device review:** One configurable task per iOS 17+ widget, with a tap opening the app on older supported iOS versions. The widget reads an App Group copy of tasks and writes each tap to a separate App Group file; the app merges those files with legacy dots. EAS native build awaits a new provisioning profile for the widget target.
 
 ---
 
@@ -237,4 +337,3 @@ Key constraints discovered: no AsyncStorage (native module null), no useFonts ho
 ---
 
 *Add new entries at the TOP of this file, under the vocabulary header. Newest first.*
-

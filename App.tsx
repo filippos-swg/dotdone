@@ -2,13 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Font from 'expo-font';
-import { View, ActivityIndicator } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import { View, ActivityIndicator, AppState } from 'react-native';
 import { RootStackParamList } from './src/types';
 import HomeScreen from './src/screens/HomeScreen';
 import CalendarScreen from './src/screens/CalendarScreen';
 import TasksScreen from './src/screens/TasksScreen';
+import { syncReminders } from './src/utils/notifications';
+
+// A reminder that lands while the app is open still shows as a plain banner.
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const linking = {
+  prefixes: ['dotit://'],
+  config: {
+    screens: {
+      Home: 'home',
+      Calendar: 'calendar',
+      Tasks: 'tasks',
+    },
+  },
+};
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -21,6 +43,15 @@ export default function App() {
       .catch(() => setFontsLoaded(true)); // show app even if font fails
   }, []);
 
+  // Reminders are recomputed from storage on every launch and return to foreground.
+  useEffect(() => {
+    syncReminders();
+    const sub = AppState.addEventListener('change', state => {
+      if (state === 'active') syncReminders();
+    });
+    return () => sub.remove();
+  }, []);
+
   if (!fontsLoaded) {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
@@ -30,7 +61,7 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

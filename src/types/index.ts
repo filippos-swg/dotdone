@@ -3,6 +3,9 @@ export interface DotTask {
   name: string;
   color: string; // hex e.g. '#EE352E'
   order: number;
+  // v1.2 — optional so files written by v1.0/v1.1 still read. Absent means off.
+  reminderEnabled?: boolean;
+  reminderTime?: string; // "HH:MM", 24h local time
 }
 
 export interface DotEntry {
@@ -15,7 +18,7 @@ export interface DotEntry {
 }
 
 export type RootStackParamList = {
-  Home: undefined;
-  Calendar: { initialDate?: string };
-  Tasks: undefined;
+  Home: { reopenPalette?: boolean } | undefined;
+  Calendar: { initialDate?: string; reopenPalette?: boolean };
+  Tasks: { createFor?: 'Home' | 'Calendar'; returnDate?: string } | undefined;
 };

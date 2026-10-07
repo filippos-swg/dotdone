@@ -6,8 +6,9 @@ Do not create AiOS core files at project root. Commit as filippos@southnorth.se.
 
 ## What this is
 
-DotDone — a one-tap iOS habit log. Tap to record a timestamped dot; see your dots on a
-calendar. Live on the App Store. React Native / Expo, TypeScript, local storage only.
+Dot It v2 (formerly DotDone) — a one-tap iOS habit log. Tap to record a timestamped dot;
+see your dots on a calendar. DotDone v1 is live on the App Store; v2 is in development.
+React Native / Expo, TypeScript, local storage only.
 
 **This repo is public.** No third-party names with quantities, no account numbers, no
 government identifiers, no credentials — write the pointer, not the payload.

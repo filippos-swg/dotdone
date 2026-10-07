@@ -18,6 +18,8 @@ import { getAllTasks } from '../storage/tasks';
 import { DotEntry } from '../types';
 import { todayString, generateId } from '../utils/dateUtils';
 import TaskPalette, { PaletteItem } from '../components/TaskPalette';
+import { TaskPreset, getOrCreatePresetTask } from '../utils/taskPresets';
+import { syncReminders } from '../utils/notifications';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -25,17 +27,24 @@ const FONT = 'NDot47';
 const RECENT_THRESHOLD_MS = 5000;
 const DOT_SIZE = 72;
 
-export default function HomeScreen({ navigation }: Props) {
+export default function HomeScreen({ navigation, route }: Props) {
   const [pressing, setPressing] = useState(false);
   const [pressPos, setPressPos] = useState({ x: 0, y: 0 });
   const [showPalette, setShowPalette] = useState(false);
   const [tasks, setTasks] = useState<DotTask[]>([]);
   const longPressTriggered = useRef(false);
+  const creatingPreset = useRef(false);
 
   useFocusEffect(
     useCallback(() => {
-      getAllTasks().then(setTasks);
-    }, [])
+      getAllTasks().then(all => {
+        setTasks(all);
+        if (route.params?.reopenPalette) {
+          setShowPalette(true);
+          navigation.setParams({ reopenPalette: undefined });
+        }
+      });
+    }, [navigation, route.params?.reopenPalette])
   );
 
   // ── Save logic ────────────────────────────────────────────────────────────
@@ -50,6 +59,7 @@ export default function HomeScreen({ navigation }: Props) {
       taskId,
     };
     await addEntry(entry);
+    syncReminders(); // a dot made today silences today's reminder for that task
     navigation.navigate('Calendar', {});
   };
 
@@ -115,6 +125,21 @@ export default function HomeScreen({ navigation }: Props) {
     );
   };
 
+  const handleSelectPreset = async (preset: TaskPreset) => {
+    if (creatingPreset.current) return;
+    creatingPreset.current = true;
+    setShowPalette(false);
+    try {
+      const task = await getOrCreatePresetTask(preset);
+      setTasks(await getAllTasks());
+      await attemptSave(task.name, task.color, task.id);
+    } catch (err) {
+      Alert.alert('TASK NOT ADDED', String(err));
+    } finally {
+      creatingPreset.current = false;
+    }
+  };
+
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
@@ -130,7 +155,7 @@ export default function HomeScreen({ navigation }: Props) {
       >
         {!pressing && (
           <View style={styles.contentArea}>
-            <Text style={styles.title}>DotDone</Text>
+            <Text style={styles.title}>Dot It</Text>
             <Text style={styles.subtitle}>
               A SIMPLE CALENDAR APP{'\n'}
               TO REMIND YOU IF YOU'VE{'\n'}
@@ -139,7 +164,8 @@ export default function HomeScreen({ navigation }: Props) {
             <View style={styles.spacer} />
             <Text style={styles.instructions}>
               TAP TO RECORD A DOT.{'\n'}
-              HOLD TO CHOOSE A TASK.
+              HOLD TO CHOOSE A COLORED TASK.{'\n'}
+              CREATE ONE IN MY TASKS.
             </Text>
           </View>
         )}
@@ -181,6 +207,11 @@ export default function HomeScreen({ navigation }: Props) {
         visible={showPalette}
         tasks={tasks}
         onSelect={handleSelectTask}
+        onSelectPreset={handleSelectPreset}
+        onCreateTask={() => {
+          setShowPalette(false);
+          navigation.navigate('Tasks', { createFor: 'Home' });
+        }}
         onClose={() => setShowPalette(false)}
       />
     </View>

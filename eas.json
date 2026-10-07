@@ -11,11 +11,21 @@
     "preview": {
       "distribution": "internal"
     },
+    "simulator": {
+      "withoutCredentials": true,
+      "ios": {
+        "simulator": true
+      }
+    },
     "production": {
       "autoIncrement": true
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "ascAppId": "6767492017"
+      }
+    }
   }
 }
