@@ -45,7 +45,7 @@ export async function exportData(): Promise<ExportResult> {
   await Sharing.shareAsync(uri, {
     mimeType: 'application/json',
     UTI: 'public.json',
-    dialogTitle: 'DotDone export',
+    dialogTitle: 'Dot It export',
   });
   return 'shared';
 }

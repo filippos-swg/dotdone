@@ -1,43 +1,39 @@
-# DotDone — App Store Metadata
+# Dot It — v2 App Store metadata draft
 
-## Name
-DotDone
+Use this on the existing DotDone App Store Connect record. Keep the existing app ID and bundle ID `se.southnorth.dotdone`. Confirm that “Dot It” is available for the desired localization in App Store Connect before submitting.
 
-## Subtitle (30 chars max)
-Tap. Done. Track it.
+## Name (30 characters max)
+Dot It
 
-## Description (4000 chars max)
-DotDone is the simplest habit tracker possible.
+## Subtitle (30 characters max)
+Tap. Done. Remember.
 
-Tap the screen. A dot is saved. That's it.
+## Description
+Dot It is a quiet way to remember whether you did the thing.
 
-No streaks, no badges, no notifications pushing you around. Just a clean record of whether you did the thing — took your pill, drank your water, did your workout — with the exact time you did it.
+Tap to record a dot. Hold to choose a task. Open the calendar to see what you did and when.
 
-Open the calendar any day and see your dots. Each dot shows the time you tapped. That's your proof.
+Set an optional daily reminder for a task at a time you choose. Everything is stored on your device, with no account or tracking. You can export a copy of your tasks and dots as a JSON file whenever you like.
 
-**How it works**
-Tap anywhere on the screen to record a dot for today. The dot is saved instantly with the current date and time. Tap SEE CALENDAR to view your history — by week or by month.
+The iOS home-screen widget lets you record a dot for a chosen task with one tap. On supported versions of iOS, it records directly from the widget.
 
-**Calendar view**
-Switch between weekly and monthly views. Navigate forward and backward through your history. Tap any date to see its dots. Long-press a dot to delete it.
-
-**Private by design**
-Everything stays on your device. No account, no cloud, no data collection. Your dots are yours.
-
-## Keywords (100 chars max, comma-separated)
-habit,tracker,reminder,daily,log,calendar,pill,medication,routine,simple,minimal,dot
+## Keywords (100 characters max, comma-separated)
+habit,tracker,reminder,daily,log,calendar,pill,medication,routine,simple,dot
 
 ## Category
 Health & Fitness
 
-## Secondary Category
+## Secondary category
 Productivity
 
-## Age Rating
+## Age rating
 4+
 
 ## Support URL
-https://southnorth.se
+https://filippos-swg.github.io/dotdone/support.html
 
-## Privacy Policy URL
+## Privacy policy URL
 https://filippos-swg.github.io/dotdone/privacy.html
+
+## What's New (v2 draft)
+DotDone is now Dot It. This update adds optional daily task reminders, a JSON export for your data, and a home-screen widget for one-tap logging. Your existing dots and tasks stay in place.

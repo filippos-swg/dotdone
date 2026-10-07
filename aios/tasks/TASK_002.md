@@ -1,10 +1,12 @@
-# TASK 002 — Opt-in Daily Reminders (v1.2)
+# TASK 002 — Opt-in Daily Reminders (Dot It v2)
 
-**Status:** Not started (sequenced after TASK_001)
+**Status:** Implemented on feature/dot-it-v2; device verification pending
 **Owner:** AI (Claude session) with Filippos review
 **Reviewer:** Filippos
-**Branch:** task/002-daily-reminders
-**Last updated:** 2026-07-18
+**Branch:** feature/dot-it-v2
+**Last updated:** 2026-10-07
+
+**Release interaction to verify:** A widget tap writes a dot without opening the app. The JavaScript reminder sync runs on app foreground, so a scheduled reminder may still fire after a widget tap until the app next opens. Resolve or explicitly redesign this interaction before release.
 
 ---
 
@@ -40,10 +42,10 @@ The core use case is medication. A log you forget to open doesn't close the memo
 
 ## Done When
 
-- [ ] Reminder can be enabled per task with a time
+- [x] Reminder can be enabled per task with a time
 - [ ] Notification fires at the set time with correct task name
-- [ ] Logging a dot for the task before the set time suppresses that day's notification
-- [ ] Permission requested lazily, denial handled silently
+- [x] Logging a dot for the task before the set time suppresses that day's notification (code path; device test pending)
+- [x] Permission requested lazily, denial handled silently (code path; device test pending)
 - [ ] Tested on device
 - [ ] Decision or change entry written in `aios/LOG.md`; `aios/STATE.md` regenerated at close
 - [ ] Human review complete

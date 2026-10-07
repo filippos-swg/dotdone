@@ -1,10 +1,10 @@
-# TASK 004 — iOS Home-Screen Widget (v1.3)
+# TASK 004 — iOS Home-Screen Widget (Dot It v2)
 
-**Status:** Not started — BLOCKED until v1.1 ships and v1.0 passes Apple review
+**Status:** Implementation in progress; native build blocked on widget provisioning profile
 **Owner:** AI (Claude session) with Filippos review
 **Reviewer:** Filippos
-**Branch:** task/004-home-widget
-**Last updated:** 2026-07-18
+**Branch:** feature/dot-it-v2
+**Last updated:** 2026-10-07
 
 ---
 
@@ -14,13 +14,13 @@ A home-screen widget that logs a dot without opening the app: tap the widget, do
 
 ## Context
 
-Highest long-term value, biggest technical lift. Requires a native WidgetKit extension, which means leaving plain Expo Go workflow (config plugin / dev client, EAS build for every iteration) and sharing storage between app and widget via an App Group. Do not start this while cheaper wins (TASK_001–003) are unshipped.
+Highest long-term value, biggest technical lift. Requires a native WidgetKit extension, which means leaving plain Expo Go workflow (config plugin / dev client, EAS build for every iteration) and sharing storage between app and widget via an App Group. The owner grouped the existing roadmap into Dot It v2 on 2026-10-07.
 
 ## Scope decisions to make before starting
 
-- **Interactivity:** iOS 17+ App Intents allow logging directly from the widget. Pre-17 fallback is deep-link into the app. Decide minimum iOS version.
-- **Which task:** widget shows one user-chosen task (e.g. MEDICINE) or the default black dot. One widget = one task; multiple widgets for multiple tasks.
-- **Storage:** entries JSON must move to (or be mirrored in) an App Group container so the widget extension can write. This is a storage migration — schema care required.
+- **Interactivity:** Implemented with iOS 17+ App Intents; older supported iOS opens the app from the widget. Awaiting owner/device confirmation.
+- **Which task:** One user-chosen task per iOS 17+ widget; multiple widgets can choose different tasks. Awaiting owner/device confirmation.
+- **Storage:** Existing app files stay readable. The widget writes each tap to a separate App Group file; the app merges those files with legacy entries into an App Group history file, preserving the old JSON shape. Device migration test pending.
 
 ## Instructions
 
@@ -43,7 +43,7 @@ Highest long-term value, biggest technical lift. Requires a native WidgetKit ext
 ## Done When
 
 - [ ] Tapping the widget records a dot without opening the app (iOS 17+)
-- [ ] App and widget read/write the same store with no data loss
+- [ ] Widget dots merge into the app's history with no data loss
 - [ ] Existing users' data migrates transparently
 - [ ] EAS production build passes
 - [ ] Decision or change entry written in `aios/LOG.md`; `aios/STATE.md` regenerated at close

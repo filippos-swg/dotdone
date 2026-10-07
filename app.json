@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "dotdone",
+    "name": "Dot It",
     "slug": "dotdone",
-    "version": "1.1.0",
+    "scheme": "dotit",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,8 +15,11 @@
     },
     "ios": {
       "supportsTablet": true,
+      "appleTeamId": "HCT5373D54",
       "bundleIdentifier": "se.southnorth.dotdone",
-      "privacyPolicyUrl": "https://filippos-swg.github.io/dotdone/privacy.html",
+      "entitlements": {
+        "com.apple.security.application-groups": ["group.se.southnorth.dotdone"]
+      },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -38,7 +42,8 @@
     },
     "plugins": [
       "expo-font",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "@bacons/apple-targets"
     ]
   }
 }

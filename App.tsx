@@ -21,6 +21,16 @@ Notifications.setNotificationHandler({
 });
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const linking = {
+  prefixes: ['dotit://'],
+  config: {
+    screens: {
+      Home: 'home',
+      Calendar: 'calendar',
+      Tasks: 'tasks',
+    },
+  },
+};
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -51,7 +61,7 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

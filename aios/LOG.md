@@ -1,9 +1,19 @@
-# DotDone — Decision & Change Log
+# Dot It — Decision & Change Log
 
 **Vocabulary.** An entry with a `**Status:**` is a decision. An entry without one is a change.
 `APPROVED` — Filippos has signed it · `RECOMMENDED` — awaiting his pass / adjust / kill · `OPEN` — undecided, needs work · `SUPERSEDED` — replaced, with a pointer to what replaced it.
 
 Newest first. Append only — never rewrite an entry. A correction is a new entry that supersedes the old one.
+
+---
+
+## 2026-10-07 — Dot It v2 name and scope
+**Status:** APPROVED
+**Decision:** Rename the existing app to “Dot It” for version 2 and use the previously approved roadmap: opt-in task reminders, JSON export, then the home-screen widget. Keep the existing App Store app record, bundle ID `se.southnorth.dotdone`, EAS project, and old JSON filenames so installed users retain their history.
+
+**Evidence:** Direct owner request and follow-up confirming “Use the existing roadmap.” The public App Store listing still showed v1.0 on this date; EAS showed a completed v1.1.0 build, but private App Store Connect status was unavailable.
+
+**Widget implementation assumption, awaiting device review:** One configurable task per iOS 17+ widget, with a tap opening the app on older supported iOS versions. The widget reads an App Group copy of tasks and writes each tap to a separate App Group file; the app merges those files with legacy dots. EAS native build awaits a new provisioning profile for the widget target.
 
 ---
 
@@ -237,4 +247,3 @@ Key constraints discovered: no AsyncStorage (native module null), no useFonts ho
 ---
 
 *Add new entries at the TOP of this file, under the vocabulary header. Newest first.*
-

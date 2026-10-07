@@ -132,7 +132,7 @@ export default function HomeScreen({ navigation }: Props) {
       >
         {!pressing && (
           <View style={styles.contentArea}>
-            <Text style={styles.title}>DotDone</Text>
+            <Text style={styles.title}>Dot It</Text>
             <Text style={styles.subtitle}>
               A SIMPLE CALENDAR APP{'\n'}
               TO REMIND YOU IF YOU'VE{'\n'}

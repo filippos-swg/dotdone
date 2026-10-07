@@ -11,6 +11,12 @@
     "preview": {
       "distribution": "internal"
     },
+    "simulator": {
+      "withoutCredentials": true,
+      "ios": {
+        "simulator": true
+      }
+    },
     "production": {
       "autoIncrement": true
     }

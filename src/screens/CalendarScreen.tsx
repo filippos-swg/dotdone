@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   StatusBar,
+  AppState,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -65,6 +66,14 @@ export default function CalendarScreen({ navigation, route }: Props) {
       loadData();
     }, [])
   );
+
+  // A widget can add a dot while this screen remains mounted in the background.
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', state => {
+      if (state === 'active') loadData().catch(err => Alert.alert('LOAD ERROR', String(err)));
+    });
+    return () => subscription.remove();
+  }, []);
 
   const loadData = async () => {
     const entries = await getAllEntries();
