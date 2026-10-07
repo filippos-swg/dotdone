@@ -46,6 +46,8 @@ During 2.0.0 (5) TestFlight testing, Filippos reported four saved dots after mak
 - [x] New signed build reaches the internal TestFlight group with focused notes.
 - [x] Calendar Dot It footer is larger and underlined.
 - [x] Task picker offers five ready-made colored tasks, reusing any existing task with the same name.
+- [x] Choosing a preset can apply its color to a same-named existing task without changing historical dots.
+- [x] Signed 2.0.0 (11) production build compiles and is scheduled for Apple upload.
 - [x] TypeScript, focused data tests, and iOS Metro export pass after the ready-made task change.
 - [ ] Owner verifies two deliberate Calendar actions make exactly two entries.
 - [ ] Owner verifies final build's TestFlight title and installed icon label on device. Build 9 TestFlight still showed the old approved title despite the saved App Store Connect name.

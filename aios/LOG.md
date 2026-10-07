@@ -7,6 +7,15 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — Existing named tasks can take a preset color
+**Status:** RECOMMENDED
+
+**Evidence:** The owner requested a brown Garbage preset, but already had a green Garbage task in TestFlight. The initial implementation hid the brown preset whenever a same-named task existed, so it could not satisfy that request on the owner's device.
+
+**Practical consequence:** The ready-made picker shows a preset when a same-named task uses a different color. Selecting it updates that task's color for future dots and records a dot, without replacing old dots or changing their historical colors. [Production build 11](https://expo.dev/accounts/fliphq/projects/dotdone/builds/173f3c84-9b4c-4336-a729-6e25ade738d8) compiled with this correction and was [scheduled for Apple upload](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/6f685eea-05c4-4b30-827e-64139dcbda49). The IPA declares `Dot It` for the app and widget; on-device behavior remains unverified. This supersedes the earlier entry's narrower statement that preset selection would never change an existing task.
+
+---
+
 ## 2026-10-07 — Ready-made colored tasks and v2 launch filing
 **Status:** APPROVED
 

@@ -30,10 +30,11 @@ export default function TaskPalette({ visible, tasks, onSelect, onSelectPreset, 
     { id: 'default', name: 'DEFAULT', color: '#000000' },
     ...tasks.map(t => ({ id: t.id, name: t.name, color: t.color })),
   ];
-  const presets = TASK_PRESETS.filter(preset =>
-    !tasks.some(task => task.name.trim().toUpperCase() === preset.name) &&
-    availablePresetColor(preset, tasks)
-  );
+  const presets = TASK_PRESETS.filter(preset => {
+    const existing = tasks.find(task => task.name.trim().toUpperCase() === preset.name);
+    return (!existing || !preset.colors.includes(existing.color.toUpperCase())) &&
+      !!availablePresetColor(preset, tasks);
+  });
 
   return (
     <Modal
@@ -74,7 +75,7 @@ export default function TaskPalette({ visible, tasks, onSelect, onSelectPreset, 
                       onPress={() => onSelectPreset(preset)}
                       activeOpacity={0.7}
                       accessibilityRole="button"
-                      accessibilityLabel={`Create ${preset.name.toLowerCase()} and make a dot`}
+                      accessibilityLabel={`Use ${preset.name.toLowerCase()} preset and make a dot`}
                     >
                       <View style={[styles.paletteDot, { backgroundColor: availablePresetColor(preset, tasks) }]} />
                       <Text style={styles.paletteName} numberOfLines={2}>{preset.name}</Text>

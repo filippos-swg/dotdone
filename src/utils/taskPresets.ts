@@ -1,5 +1,5 @@
 import { DotTask } from '../types';
-import { addTask, getAllTasks } from '../storage/tasks';
+import { addTask, getAllTasks, updateTask } from '../storage/tasks';
 
 export type TaskPreset = {
   name: string;
@@ -24,9 +24,14 @@ export function availablePresetColor(preset: TaskPreset, tasks: DotTask[]): stri
 export async function getOrCreatePresetTask(preset: TaskPreset): Promise<DotTask> {
   const tasks = await getAllTasks();
   const existing = tasks.find(task => task.name.trim().toUpperCase() === preset.name);
-  if (existing) return existing;
+  if (existing && preset.colors.includes(existing.color.toUpperCase())) return existing;
 
   const color = availablePresetColor(preset, tasks);
   if (!color) throw new Error(`ALL ${preset.name} COLORS ARE IN USE. PICK A COLOR IN MY TASKS.`);
+  if (existing) {
+    const updated = { ...existing, color };
+    await updateTask(updated);
+    return updated;
+  }
   return addTask(preset.name, color);
 }
