@@ -1,0 +1,13 @@
+# Dot It TestFlight polish close ledger
+
+- [ ] 1. Ledger committed alone.
+- [ ] 2. Task files reflect verified work.
+- [ ] 3. Naming and design changes recorded in LOG.md.
+- [ ] 4. Work staged.
+- [ ] 5. Work committed; SHA recorded here.
+- [ ] 6. STATE.md regenerated against the work commit.
+- [ ] 7. aios-check exits with no errors.
+- [ ] 8. Surface and ledger committed; close marker recorded.
+- [ ] 9. Pushed with ledger present.
+- [ ] 10. Ledger removed in its own commit and pushed.
+- [ ] 11. Outcome reported.
