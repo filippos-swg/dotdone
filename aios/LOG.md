@@ -7,6 +7,18 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — Dot It readiness follow-up
+### Changes
+Calendar entries now have visible confirmed deletion and the list scrolls on busy days. Browsing an older date offers a Today shortcut. The task picker has a New Task & Color action; it opens the existing task form, then returns to the originating Home or Calendar picker after save or cancel. Task saves reject overlapping taps. The picker backdrop is separate from its controls so tapping a task cannot also activate backdrop dismissal.
+
+### Validation limit
+TypeScript, four focused data tests, and an iOS Metro export pass. Signed [build 2.0.0 (8)](https://expo.dev/accounts/fliphq/projects/dotdone/builds/7909cdb0-bdf7-436a-9af0-5bf60d72faee) compiled and was [uploaded to Apple](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/d78b8cc9-872d-4da3-9ae3-eef195205c79) for TestFlight processing. The exact source of the build 5 duplicate entries remains unproven; build 8 needs iPhone verification. The combined App Store listing name remains distinct from the binary display name. Version 2 is still a draft and has not been submitted for App Review.
+
+### TestFlight availability
+Apple finished processing [build 8](https://appstoreconnect.apple.com/teams/460fc214-6895-4781-b4d4-a21105caeef7/apps/6767492017/testflight/ios/ab1c7b24-6c32-4288-afe1-1650e97cfa43), assigned it to the existing one-tester Team (Expo) internal group, and saved build-specific checks for deletion, duplicate count, named colors, dates, icon label, history, export, reminders, and widget behavior.
+
+---
+
 ## 2026-10-07 — Calendar build 7 is ready for internal testing
 ### Validation
 App Store Connect finished processing 2.0.0 (7), attached it to the existing one-tester Team (Expo) internal group, and saved build-specific What to Test instructions covering duplicate counts, date navigation, named colors, history, reminders, export, and the widget. The app version 2.0.0 remains a draft and has not been submitted for App Review. Device behavior still awaits Filippos's retest.

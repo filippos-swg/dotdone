@@ -18,7 +18,7 @@ export interface DotEntry {
 }
 
 export type RootStackParamList = {
-  Home: undefined;
-  Calendar: { initialDate?: string };
-  Tasks: undefined;
+  Home: { reopenPalette?: boolean } | undefined;
+  Calendar: { initialDate?: string; reopenPalette?: boolean };
+  Tasks: { createFor?: 'Home' | 'Calendar'; returnDate?: string } | undefined;
 };

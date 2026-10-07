@@ -18,10 +18,11 @@ type Props = {
   visible: boolean;
   tasks: DotTask[];
   onSelect: (item: PaletteItem) => void;
+  onCreateTask: () => void;
   onClose: () => void;
 };
 
-export default function TaskPalette({ visible, tasks, onSelect, onClose }: Props) {
+export default function TaskPalette({ visible, tasks, onSelect, onCreateTask, onClose }: Props) {
   const paletteItems: PaletteItem[] = [
     { id: 'default', name: 'DEFAULT', color: '#000000' },
     ...tasks.map(t => ({ id: t.id, name: t.name, color: t.color })),
@@ -34,7 +35,8 @@ export default function TaskPalette({ visible, tasks, onSelect, onClose }: Props
       animationType="fade"
       onRequestClose={onClose}
     >
-      <Pressable style={styles.backdrop} onPress={onClose}>
+      <View style={styles.overlay}>
+        <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Close task picker" />
         <View style={styles.paletteSheet}>
           <Text style={styles.paletteTitle}>CHOOSE A TASK</Text>
           <ScrollView contentContainerStyle={styles.paletteGrid}>
@@ -52,20 +54,26 @@ export default function TaskPalette({ visible, tasks, onSelect, onClose }: Props
               </TouchableOpacity>
             ))}
           </ScrollView>
+          <TouchableOpacity style={styles.createTask} onPress={onCreateTask} accessibilityRole="button">
+            <Text style={styles.createTaskText}>+ NEW TASK & COLOR</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cancelPalette} onPress={onClose}>
             <Text style={styles.cancelPaletteText}>CANCEL</Text>
           </TouchableOpacity>
         </View>
-      </Pressable>
+      </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
+  overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'flex-end',
+  },
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   paletteSheet: {
     backgroundColor: '#fff',
@@ -106,6 +114,17 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: '#000',
     textAlign: 'center',
+  },
+  createTask: {
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+  },
+  createTaskText: {
+    fontFamily: FONT,
+    fontSize: 11,
+    color: '#000',
   },
   cancelPalette: {
     alignItems: 'center',

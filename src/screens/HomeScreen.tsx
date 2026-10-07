@@ -26,7 +26,7 @@ const FONT = 'NDot47';
 const RECENT_THRESHOLD_MS = 5000;
 const DOT_SIZE = 72;
 
-export default function HomeScreen({ navigation }: Props) {
+export default function HomeScreen({ navigation, route }: Props) {
   const [pressing, setPressing] = useState(false);
   const [pressPos, setPressPos] = useState({ x: 0, y: 0 });
   const [showPalette, setShowPalette] = useState(false);
@@ -35,8 +35,14 @@ export default function HomeScreen({ navigation }: Props) {
 
   useFocusEffect(
     useCallback(() => {
-      getAllTasks().then(setTasks);
-    }, [])
+      getAllTasks().then(all => {
+        setTasks(all);
+        if (route.params?.reopenPalette) {
+          setShowPalette(true);
+          navigation.setParams({ reopenPalette: undefined });
+        }
+      });
+    }, [navigation, route.params?.reopenPalette])
   );
 
   // ── Save logic ────────────────────────────────────────────────────────────
@@ -184,6 +190,10 @@ export default function HomeScreen({ navigation }: Props) {
         visible={showPalette}
         tasks={tasks}
         onSelect={handleSelectTask}
+        onCreateTask={() => {
+          setShowPalette(false);
+          navigation.navigate('Tasks', { createFor: 'Home' });
+        }}
         onClose={() => setShowPalette(false)}
       />
     </View>

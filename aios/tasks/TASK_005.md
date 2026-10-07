@@ -1,6 +1,6 @@
 # TASK 005 — TestFlight Calendar logging and flow
 
-**Status:** Build 7 ready in the internal TestFlight group; device retest pending
+**Status:** Build 8 ready in the internal TestFlight group; device retest pending
 **Owner:** AI with Filippos device review
 **Branch:** feature/dot-it-v2
 **Last updated:** 2026-10-07
@@ -19,6 +19,8 @@ During 2.0.0 (5) TestFlight testing, Filippos reported four saved dots after mak
 - Replace the footer + with a labeled Calendar action. Keep the Home tap/hold behavior unchanged.
 - Verify that TestFlight logging and the installed icon behave as expected on an iPhone.
 - Review the path for creating a named, colored task after the logging issue is stable.
+- Make mistaken dots removable without discovering a long-press gesture.
+- Let the task picker create a named, colored task and return to logging.
 
 ## Done when
 
@@ -29,6 +31,11 @@ During 2.0.0 (5) TestFlight testing, Filippos reported four saved dots after mak
 - [x] TypeScript, unit tests, and iOS Metro export pass.
 - [x] Signed 2.0.0 (7) build uploaded to the existing App Store Connect app.
 - [x] Updated signed build is available in TestFlight with build-specific test notes.
+- [x] Calendar rows have visible confirmed deletion and scroll when the day is full.
+- [x] Task picker opens new-task creation and returns to the same logging context.
+- [x] Calendar offers a Today shortcut when browsing another day.
+- [x] Signed 2.0.0 (8) build uploaded to the existing App Store Connect app.
+- [x] Build 8 processes and is available to the internal tester group with focused notes.
 - [ ] Owner verifies two deliberate Calendar actions make exactly two entries.
 - [ ] Installed icon label discrepancy is understood on device.
-- [ ] Named-color creation flow is revised or explicitly accepted after review.
+- [ ] New task creation, deletion, navigation, and history are verified on an iPhone.

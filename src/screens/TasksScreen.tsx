@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -40,7 +40,7 @@ const COLORS_PER_ROW = 6;
 
 type FormMode = 'none' | 'add' | 'edit';
 
-export default function TasksScreen({ navigation }: Props) {
+export default function TasksScreen({ navigation, route }: Props) {
   const [tasks, setTasks] = useState<DotTask[]>([]);
   const [usedColors, setUsedColors] = useState<string[]>([]);
   const [formMode, setFormMode] = useState<FormMode>('none');
@@ -50,11 +50,20 @@ export default function TasksScreen({ navigation }: Props) {
   const [reminderOn, setReminderOn] = useState(false);
   const [reminderTime, setReminderTime] = useState(DEFAULT_REMINDER_TIME);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [creationReturn, setCreationReturn] = useState<{
+    screen: 'Home' | 'Calendar'; date?: string;
+  } | null>(null);
+  const saveInProgress = useRef(false);
 
   useFocusEffect(
     useCallback(() => {
       loadTasks();
-    }, [])
+      if (route.params?.createFor) {
+        openAddForm();
+        setCreationReturn({ screen: route.params.createFor, date: route.params.returnDate });
+        navigation.setParams({ createFor: undefined, returnDate: undefined });
+      }
+    }, [navigation, route.params?.createFor, route.params?.returnDate])
   );
 
   const loadTasks = async () => {
@@ -117,6 +126,7 @@ export default function TasksScreen({ navigation }: Props) {
   };
 
   const handleSave = async () => {
+    if (saveInProgress.current) return;
     const trimmed = nameInput.trim().toUpperCase();
     if (!trimmed) {
       Alert.alert('NAME REQUIRED', 'PLEASE ENTER A NAME FOR THIS TASK.');
@@ -127,15 +137,37 @@ export default function TasksScreen({ navigation }: Props) {
       return;
     }
 
-    const reminder = { reminderEnabled: reminderOn, reminderTime };
-    if (formMode === 'add') {
-      await addTask(trimmed, selectedColor, reminder);
-    } else if (formMode === 'edit' && editingTask) {
-      await updateTask({ ...editingTask, name: trimmed, color: selectedColor, ...reminder });
+    saveInProgress.current = true;
+    try {
+      const reminder = { reminderEnabled: reminderOn, reminderTime };
+      if (formMode === 'add') {
+        await addTask(trimmed, selectedColor, reminder);
+      } else if (formMode === 'edit' && editingTask) {
+        await updateTask({ ...editingTask, name: trimmed, color: selectedColor, ...reminder });
+      }
+      closeForm();
+      await loadTasks();
+      syncReminders();
+      if (creationReturn) returnToPalette(creationReturn);
+    } catch (err) {
+      Alert.alert('SAVE ERROR', String(err));
+    } finally {
+      saveInProgress.current = false;
     }
+  };
+
+  const returnToPalette = (origin: { screen: 'Home' | 'Calendar'; date?: string }) => {
+    setCreationReturn(null);
+    if (origin.screen === 'Calendar') {
+      navigation.popTo('Calendar', { initialDate: origin.date, reopenPalette: true });
+    } else {
+      navigation.popTo('Home', { reopenPalette: true });
+    }
+  };
+
+  const handleCancelForm = () => {
     closeForm();
-    await loadTasks();
-    syncReminders();
+    if (creationReturn) returnToPalette(creationReturn);
   };
 
   const handleDelete = (task: DotTask) => {
@@ -351,7 +383,7 @@ export default function TasksScreen({ navigation }: Props) {
                   <Text style={styles.deleteBtnText}>DELETE</Text>
                 </TouchableOpacity>
               )}
-              <TouchableOpacity style={styles.cancelBtn} onPress={closeForm}>
+              <TouchableOpacity style={styles.cancelBtn} onPress={handleCancelForm}>
                 <Text style={styles.cancelBtnText}>CANCEL</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>

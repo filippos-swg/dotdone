@@ -7,6 +7,7 @@ import {
   Alert,
   StatusBar,
   AppState,
+  ScrollView,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -15,8 +16,6 @@ import {
   getAllEntries,
   addEntry,
   deleteEntry,
-  hasDeleteHintBeenSeen,
-  markDeleteHintSeen,
 } from '../storage/entries';
 import { getAllTasks } from '../storage/tasks';
 import { DotEntry, DotTask } from '../types';
@@ -57,7 +56,6 @@ export default function CalendarScreen({ navigation, route }: Props) {
   const [calendarAnchor, setCalendarAnchor] = useState(initialDate);
   const [viewMode, setViewMode] = useState<'week' | 'month'>('week');
   const [allEntries, setAllEntries] = useState<DotEntry[]>([]);
-  const [showHint, setShowHint] = useState(false);
   const [showPalette, setShowPalette] = useState(false);
   const [tasks, setTasks] = useState<DotTask[]>([]);
   const savingDot = useRef(false);
@@ -69,8 +67,13 @@ export default function CalendarScreen({ navigation, route }: Props) {
       const focusDate = route.params?.initialDate ?? todayString();
       setSelectedDate(focusDate);
       setCalendarAnchor(focusDate);
-      loadData();
-    }, [route.params?.initialDate])
+      loadData().then(() => {
+        if (route.params?.reopenPalette) {
+          setShowPalette(true);
+          navigation.setParams({ reopenPalette: undefined });
+        }
+      }).catch(err => Alert.alert('LOAD ERROR', String(err)));
+    }, [navigation, route.params?.initialDate, route.params?.reopenPalette])
   );
 
   // A widget can add a dot while this screen remains mounted in the background.
@@ -86,11 +89,6 @@ export default function CalendarScreen({ navigation, route }: Props) {
     setAllEntries(entries);
     const allTasks = await getAllTasks();
     setTasks(allTasks);
-    const seen = await hasDeleteHintBeenSeen();
-    if (!seen && entries.length > 0) {
-      setShowHint(true);
-      await markDeleteHintSeen();
-    }
   };
 
   // ── Add dot on selected day ──────────────────────────────────────────────────
@@ -255,33 +253,38 @@ export default function CalendarScreen({ navigation, route }: Props) {
         <Text style={styles.countLabel}>{countLabel}</Text>
 
         {/* Dot list */}
-        <View style={styles.dotList}>
+        <ScrollView style={styles.dotList} contentContainerStyle={styles.dotListContent}>
           {selectedEntries.map(entry => (
-            <TouchableOpacity
-              key={entry.id}
-              style={styles.dotRow}
-              onLongPress={() => handleLongPress(entry)}
-              delayLongPress={500}
-              activeOpacity={0.7}
-            >
-              <View style={[styles.dotBullet, { backgroundColor: resolveColor(entry.color) }]} />
-              <View style={styles.dotInfo}>
-                {isBackfilled(entry) ? (
-                  <Text style={styles.addedLaterLabel}>ADDED LATER</Text>
-                ) : (
-                  <Text style={styles.timeLabel}>{formatTime(entry.timestamp)}</Text>
-                )}
-                {entry.actionName !== 'Default' && (
-                  <Text style={styles.taskNameLabel}>{entry.actionName}</Text>
-                )}
-              </View>
-            </TouchableOpacity>
+            <View key={entry.id} style={styles.dotRow}>
+              <TouchableOpacity
+                style={styles.dotDetails}
+                onLongPress={() => handleLongPress(entry)}
+                delayLongPress={500}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.dotBullet, { backgroundColor: resolveColor(entry.color) }]} />
+                <View style={styles.dotInfo}>
+                  {isBackfilled(entry) ? (
+                    <Text style={styles.addedLaterLabel}>ADDED LATER</Text>
+                  ) : (
+                    <Text style={styles.timeLabel}>{formatTime(entry.timestamp)}</Text>
+                  )}
+                  {entry.actionName !== 'Default' && (
+                    <Text style={styles.taskNameLabel}>{entry.actionName}</Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteDotBtn}
+                onPress={() => handleLongPress(entry)}
+                accessibilityRole="button"
+                accessibilityLabel={`Delete ${entry.actionName} dot at ${formatTime(entry.timestamp)}`}
+              >
+                <Text style={styles.deleteDotText}>DELETE</Text>
+              </TouchableOpacity>
+            </View>
           ))}
-        </View>
-
-        {showHint && dotCount > 0 && (
-          <Text style={styles.hintText}>LONG PRESS A DOT TO DELETE</Text>
-        )}
+        </ScrollView>
       </View>
 
       {/* ── BOTTOM: Calendar ─────────────────────────────────────────────────── */}
@@ -371,6 +374,15 @@ export default function CalendarScreen({ navigation, route }: Props) {
             {viewMode === 'week' ? 'CHANGE TO MONTHLY VIEW' : 'CHANGE TO WEEKLY VIEW'}
           </Text>
         </TouchableOpacity>
+        {selectedDate !== todayString() && (
+          <TouchableOpacity style={styles.todayBtn} onPress={() => {
+            const today = todayString();
+            setSelectedDate(today);
+            setCalendarAnchor(today);
+          }}>
+            <Text style={styles.todayText}>BACK TO TODAY</Text>
+          </TouchableOpacity>
+        )}
 
       </View>
 
@@ -413,6 +425,10 @@ export default function CalendarScreen({ navigation, route }: Props) {
         visible={showPalette}
         tasks={tasks}
         onSelect={handleAddDot}
+        onCreateTask={() => {
+          setShowPalette(false);
+          navigation.navigate('Tasks', { createFor: 'Calendar', returnDate: selectedDate });
+        }}
         onClose={() => setShowPalette(false)}
       />
 
@@ -469,14 +485,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   dotList: {
+    flex: 1,
     width: '100%',
     paddingHorizontal: 52,
   },
+  dotListContent: { paddingBottom: 8 },
   dotRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
   },
+  dotDetails: { flex: 1, flexDirection: 'row', alignItems: 'center', minHeight: 44 },
+  deleteDotBtn: { minWidth: 56, minHeight: 44, alignItems: 'flex-end', justifyContent: 'center' },
+  deleteDotText: { fontFamily: FONT, fontSize: 9, color: '#777' },
   dotBullet: {
     width: 22,
     height: 22,
@@ -504,12 +525,6 @@ const styles = StyleSheet.create({
     fontFamily: FONT,
     fontSize: 10,
     color: '#666',
-  },
-  hintText: {
-    fontFamily: FONT,
-    fontSize: 9,
-    color: '#999',
-    marginTop: 12,
   },
 
   // ── Bottom section ────────────────────────────────────────────────────────────
@@ -584,6 +599,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#000',
   },
+  todayBtn: { paddingVertical: 6 },
+  todayText: { fontFamily: FONT, fontSize: 10, color: '#000' },
 
   makeDotBtn: {
     minHeight: 52,
