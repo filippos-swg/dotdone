@@ -7,6 +7,27 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — Calendar build 7 is ready for internal testing
+### Validation
+App Store Connect finished processing 2.0.0 (7), attached it to the existing one-tester Team (Expo) internal group, and saved build-specific What to Test instructions covering duplicate counts, date navigation, named colors, history, reminders, export, and the widget. The app version 2.0.0 remains a draft and has not been submitted for App Review. Device behavior still awaits Filippos's retest.
+
+---
+
+## 2026-10-07 — Further flow changes after the Calendar retest
+**Status:** RECOMMENDED
+
+**Evidence:** The current TestFlight Calendar screenshot shows four identical minute-only rows, a large unused area, an unlabeled add control, and no visible delete action. Home and Tasks code show that creating a named, colored task still requires leaving the task picker and returning to log it.
+
+**Practical consequence if accepted:** Give each logged row a visible delete action; add a direct “New task + color” route from the task picker that returns to logging; add a Today shortcut when browsing older dates. Keep the Home one-tap/hold behavior and the app's minimal, local-only scope.
+
+---
+
+## 2026-10-07 — Calendar fix uploaded for TestFlight
+### Validation
+TypeScript, four unit tests, and an iOS Metro export passed. Signed production [build 2.0.0 (7)](https://expo.dev/accounts/fliphq/projects/dotdone/builds/5abf576a-58ea-4c3c-bfc1-ef3a2ff13e8b) finished and was [uploaded to App Store Connect](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/32bcbd42-3bc1-446e-83ca-6308cbc3acf2). Apple processing and the owner's on-device retest are pending. Build 6 also reached App Store Connect, but build 7 supersedes it for Calendar testing.
+
+---
+
 ## 2026-10-07 — TestFlight Calendar feedback
 **Status:** APPROVED
 

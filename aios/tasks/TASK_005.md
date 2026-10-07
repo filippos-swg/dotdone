@@ -1,6 +1,6 @@
 # TASK 005 — TestFlight Calendar logging and flow
 
-**Status:** Calendar code updated; signed build and device retest pending
+**Status:** Build 7 ready in the internal TestFlight group; device retest pending
 **Owner:** AI with Filippos device review
 **Branch:** feature/dot-it-v2
 **Last updated:** 2026-10-07
@@ -27,7 +27,8 @@ During 2.0.0 (5) TestFlight testing, Filippos reported four saved dots after mak
 - [x] Calendar browsing keeps the selected day, grid, and add destination aligned.
 - [x] Home and Tasks empty-state copy explain how to make named, colored dots.
 - [x] TypeScript, unit tests, and iOS Metro export pass.
-- [ ] Updated signed build is available in TestFlight.
+- [x] Signed 2.0.0 (7) build uploaded to the existing App Store Connect app.
+- [x] Updated signed build is available in TestFlight with build-specific test notes.
 - [ ] Owner verifies two deliberate Calendar actions make exactly two entries.
 - [ ] Installed icon label discrepancy is understood on device.
 - [ ] Named-color creation flow is revised or explicitly accepted after review.
