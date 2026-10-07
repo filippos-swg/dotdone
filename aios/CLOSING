@@ -7,7 +7,7 @@
 - [x] 5. Work committed; latest SHA `5fe453e` recorded here.
 - [x] 6. STATE.md regenerated against work commit `5fe453e`.
 - [x] 7. aios-check exits with no errors (0E, 1W: feature branch).
-- [ ] 8. Surface and ledger committed; close marker recorded.
+- [x] 8. Surface and ledger committed; close marker `2568f8c` recorded.
 - [ ] 9. Pushed with ledger present.
 - [ ] 10. Ledger removed in its own commit and pushed.
 - [ ] 11. Outcome reported.
