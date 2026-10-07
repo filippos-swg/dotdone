@@ -8,6 +8,6 @@
 - [x] 6. STATE.md regenerated against `5b8f4f1`.
 - [x] 7. aios-check passed (0 errors, 1 branch warning).
 - [x] 8. Surface and ledger committed; close marker `d7b408f`.
-- [ ] 9. Pushed with ledger present.
+- [x] 9. Pushed with ledger present (`309595c`).
 - [ ] 10. Ledger removed in its own commit and pushed.
 - [ ] 11. Outcome reported.
