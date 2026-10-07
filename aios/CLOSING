@@ -1,0 +1,15 @@
+# Dot It v2 close ledger
+
+The work commit 38eeda2 was pushed before this ledger was opened. This records the ordering deviation rather than presenting it as a clean protocol run.
+
+- [ ] 1. Ledger committed alone.
+- [ ] 2. Task files reflect work actually completed.
+- [ ] 3. Owner decision and implementation state recorded in LOG.md.
+- [ ] 4. Work staged.
+- [ ] 5. Work committed: 38eeda2.
+- [ ] 6. STATE.md regenerated against the latest work commit.
+- [ ] 7. aios-check exits zero.
+- [ ] 8. Surface and ledger committed.
+- [ ] 9. Pushed with ledger present.
+- [ ] 10. Ledger removed in its own commit and pushed.
+- [ ] 11. Outcome reported.
