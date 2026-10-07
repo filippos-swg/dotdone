@@ -1,6 +1,6 @@
 # TASK 005 — TestFlight Calendar logging and flow
 
-**Status:** Build 8 ready in the internal TestFlight group; device retest pending
+**Status:** Build 9 signed and uploading to TestFlight; device retest pending
 **Owner:** AI with Filippos device review
 **Branch:** feature/dot-it-v2
 **Last updated:** 2026-10-07
@@ -36,6 +36,14 @@ During 2.0.0 (5) TestFlight testing, Filippos reported four saved dots after mak
 - [x] Calendar offers a Today shortcut when browsing another day.
 - [x] Signed 2.0.0 (8) build uploaded to the existing App Store Connect app.
 - [x] Build 8 processes and is available to the internal tester group with focused notes.
+- [x] Empty Calendar days put Make a Dot in the unused day area; days with entries keep Make Another Dot.
+- [x] Calendar deletion and task color validation use app-styled dialogs.
+- [x] My Tasks has an explicit Add a Colored Task action and a labeled color picker.
+- [x] App Store Connect name saved as `Dot It: Simple Habit Log`; icon label remains `Dot It`.
+- [x] TypeScript, four data tests, and iOS Metro export pass for this follow-up.
+- [x] Signed 2.0.0 (9) production build compiles.
+- [ ] New signed build reaches the internal TestFlight group with focused notes.
 - [ ] Owner verifies two deliberate Calendar actions make exactly two entries.
-- [ ] Installed icon label discrepancy is understood on device.
+- [ ] Owner verifies TestFlight title and installed icon label on device.
+- [ ] Replace inherited preview screenshots that still show the old Home title with authentic captures from the updated app before public release.
 - [ ] New task creation, deletion, navigation, and history are verified on an iPhone.

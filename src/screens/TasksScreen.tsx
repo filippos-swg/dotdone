@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Alert,
   StatusBar,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
@@ -32,6 +32,7 @@ import {
   dateToReminderTime,
 } from '../utils/notifications';
 import { exportData } from '../utils/exportData';
+import DotDialog, { DotDialogConfig } from '../components/DotDialog';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Tasks'>;
 
@@ -50,6 +51,7 @@ export default function TasksScreen({ navigation, route }: Props) {
   const [reminderOn, setReminderOn] = useState(false);
   const [reminderTime, setReminderTime] = useState(DEFAULT_REMINDER_TIME);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [dialog, setDialog] = useState<DotDialogConfig | null>(null);
   const [creationReturn, setCreationReturn] = useState<{
     screen: 'Home' | 'Calendar'; date?: string;
   } | null>(null);
@@ -129,11 +131,13 @@ export default function TasksScreen({ navigation, route }: Props) {
     if (saveInProgress.current) return;
     const trimmed = nameInput.trim().toUpperCase();
     if (!trimmed) {
-      Alert.alert('NAME REQUIRED', 'PLEASE ENTER A NAME FOR THIS TASK.');
+      Keyboard.dismiss();
+      setDialog({ title: 'NAME REQUIRED', message: 'GIVE THIS TASK A NAME FIRST.', actions: [{ label: 'OK', appearance: 'solid' }] });
       return;
     }
     if (!selectedColor) {
-      Alert.alert('COLOR REQUIRED', 'PLEASE PICK A COLOR FOR THIS TASK.');
+      Keyboard.dismiss();
+      setDialog({ title: 'PICK A COLOR', message: `CHOOSE A COLOR FOR ${trimmed}.`, actions: [{ label: 'OK', appearance: 'solid' }] });
       return;
     }
 
@@ -150,7 +154,7 @@ export default function TasksScreen({ navigation, route }: Props) {
       syncReminders();
       if (creationReturn) returnToPalette(creationReturn);
     } catch (err) {
-      Alert.alert('SAVE ERROR', String(err));
+      setDialog({ title: 'SAVE ERROR', message: String(err), actions: [{ label: 'OK', appearance: 'solid' }] });
     } finally {
       saveInProgress.current = false;
     }
@@ -171,23 +175,26 @@ export default function TasksScreen({ navigation, route }: Props) {
   };
 
   const handleDelete = (task: DotTask) => {
-    Alert.alert(
-      'DELETE TASK',
-      `DELETE "${task.name}"?\nDOTS ALREADY RECORDED WILL KEEP THEIR COLOR.`,
-      [
-        { text: 'CANCEL', style: 'cancel' },
-        {
-          text: 'DELETE',
-          style: 'destructive',
-          onPress: async () => {
-            await deleteTask(task.id);
-            closeForm();
-            await loadTasks();
-            syncReminders();
-          },
-        },
-      ]
-    );
+    Keyboard.dismiss();
+    setDialog({
+      title: 'DELETE TASK?',
+      message: `${task.name}\nPAST DOTS WILL KEEP THEIR COLOR.`,
+      actions: [
+        { label: 'KEEP TASK', appearance: 'solid' },
+        { label: 'DELETE', appearance: 'outline', onPress: () => {
+          deleteTask(task.id)
+            .then(async () => {
+              closeForm();
+              await loadTasks();
+              syncReminders();
+            })
+            .catch(err => setDialog({
+              title: 'DELETE FAILED', message: String(err),
+              actions: [{ label: 'OK', appearance: 'solid' }],
+            }));
+        } },
+      ],
+    });
   };
 
   const handleMoveUp = async (index: number) => {
@@ -212,10 +219,10 @@ export default function TasksScreen({ navigation, route }: Props) {
     try {
       const result = await exportData();
       if (result === 'unavailable') {
-        Alert.alert('EXPORT UNAVAILABLE', 'THIS DEVICE HAS NO SHARE SHEET.');
+        setDialog({ title: 'EXPORT UNAVAILABLE', message: 'THIS DEVICE HAS NO SHARE SHEET.', actions: [{ label: 'OK', appearance: 'solid' }] });
       }
     } catch (err) {
-      Alert.alert('EXPORT ERROR', String(err));
+      setDialog({ title: 'EXPORT ERROR', message: String(err), actions: [{ label: 'OK', appearance: 'solid' }] });
     }
   };
 
@@ -247,7 +254,7 @@ export default function TasksScreen({ navigation, route }: Props) {
         {tasks.length === 0 && formMode === 'none' && (
           <Text style={styles.emptyText}>
             NO COLORED TASKS YET.{'\n'}
-            TAP + TO NAME ONE AND PICK ITS COLOR.
+            NAME ONE AND PICK ITS COLOR.
           </Text>
         )}
 
@@ -299,6 +306,7 @@ export default function TasksScreen({ navigation, route }: Props) {
             />
 
             {/* Color grid */}
+            <Text style={styles.colorLabel}>PICK A COLOR</Text>
             <View style={styles.colorGrid}>
               {TASK_COLORS.map(color => {
                 const available = isColorAvailable(color);
@@ -406,6 +414,17 @@ export default function TasksScreen({ navigation, route }: Props) {
         )}
       </ScrollView>
 
+      {canAddMore && formMode === 'none' && (
+        <TouchableOpacity
+          style={styles.addTaskBtn}
+          onPress={openAddForm}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+        >
+          <Text style={styles.addTaskBtnText}>ADD A COLORED TASK</Text>
+        </TouchableOpacity>
+      )}
+
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
       <View style={styles.footer}>
         <View style={styles.footerSlot}>
@@ -418,19 +437,6 @@ export default function TasksScreen({ navigation, route }: Props) {
         </View>
 
         <View style={styles.footerSlot}>
-          {canAddMore && formMode === 'none' && (
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={openAddForm}
-              activeOpacity={0.7}
-            >
-              <View style={styles.plusH} />
-              <View style={styles.plusV} />
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View style={styles.footerSlot}>
           <TouchableOpacity
             onPress={() => navigation.navigate('Calendar', {})}
             activeOpacity={0.6}
@@ -439,6 +445,7 @@ export default function TasksScreen({ navigation, route }: Props) {
           </TouchableOpacity>
         </View>
       </View>
+      <DotDialog config={dialog} onClose={() => setDialog(null)} />
     </KeyboardAvoidingView>
   );
 }
@@ -532,14 +539,24 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#000',
     paddingVertical: 8,
-    marginBottom: 24,
+    marginBottom: 18,
   },
+  colorLabel: { fontFamily: FONT, fontSize: 11, color: '#000', marginBottom: 14 },
   colorGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
     marginBottom: 24,
   },
+  addTaskBtn: {
+    minHeight: 52,
+    marginHorizontal: 24,
+    marginBottom: 8,
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addTaskBtnText: { fontFamily: FONT, fontSize: 12, color: '#fff' },
   colorCell: {
     width: 38,
     height: 38,
@@ -700,27 +717,5 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#000',
     letterSpacing: 0.5,
-  },
-  addBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  plusH: {
-    position: 'absolute',
-    width: 18,
-    height: 2,
-    backgroundColor: '#fff',
-    borderRadius: 1,
-  },
-  plusV: {
-    position: 'absolute',
-    width: 2,
-    height: 18,
-    backgroundColor: '#fff',
-    borderRadius: 1,
   },
 });

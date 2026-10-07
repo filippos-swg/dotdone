@@ -7,6 +7,15 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — Dot It listing and TestFlight flow polish
+**Status:** APPROVED
+
+**Evidence:** Filippos selected `Dot It: Simple Habit Log` as the App Store title and requested removal of the old name from visible copy. His TestFlight screenshots showed system-style delete and color-required alerts, an empty Calendar day with the action far below it, and difficulty finding colored-task creation.
+
+**Practical consequence:** App Store Connect saved the new listing name, while the installed app display name stays `Dot It` and the bundle ID and old storage filenames stay intact. The Calendar now keeps its add action in the empty day and stays on Calendar after logging. Delete and task-form dialogs use NDot47 and the app's black-and-white buttons. My Tasks exposes `ADD A COLORED TASK`; the task picker still offers `NEW TASK & COLOR`. The JSON export's visible filename uses `dot-it-`. Public support and privacy copy omit the former title. Signed [build 9](https://expo.dev/accounts/fliphq/projects/dotdone/builds/18fd9225-da96-46a6-acbe-c4ff8daac521) compiled after TypeScript, four data tests, and an iOS Metro export passed; its [TestFlight upload](https://expo.dev/accounts/fliphq/projects/dotdone/submissions/f885bd1d-3431-4804-b08c-684bc35e6826) and on-device review are pending. Version 2 remains a draft, not an App Review submission.
+
+---
+
 ## 2026-10-07 — Dot It readiness follow-up
 ### Changes
 Calendar entries now have visible confirmed deletion and the list scrolls on busy days. Browsing an older date offers a Today shortcut. The task picker has a New Task & Color action; it opens the existing task form, then returns to the originating Home or Calendar picker after save or cancel. Task saves reject overlapping taps. The picker backdrop is separate from its controls so tapping a task cannot also activate backdrop dismissal.

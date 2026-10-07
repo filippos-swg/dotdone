@@ -39,7 +39,7 @@ export async function exportData(): Promise<ExportResult> {
 
   const payload = await buildExport();
   const dir = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
-  const uri = `${dir}dotdone-${todayString()}.json`;
+  const uri = `${dir}dot-it-${todayString()}.json`;
   await FileSystem.writeAsStringAsync(uri, JSON.stringify(payload, null, 2));
 
   await Sharing.shareAsync(uri, {

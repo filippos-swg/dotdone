@@ -1,9 +1,9 @@
 # Dot It — v2 App Store metadata draft
 
-Use this on the existing DotDone App Store Connect record. Keep the existing app ID and bundle ID `se.southnorth.dotdone`. Confirm that “Dot It” is available for the desired localization in App Store Connect before submitting.
+Use this on the existing App Store Connect record. Keep the existing app ID and bundle ID `se.southnorth.dotdone`. The owner selected the unique listing title below; keep the installed icon label `Dot It`.
 
 ## Name (30 characters max)
-Dot It
+Dot It: Simple Habit Log
 
 ## Subtitle (30 characters max)
 Tap. Done. Remember.
@@ -36,4 +36,4 @@ https://filippos-swg.github.io/dotdone/support.html
 https://filippos-swg.github.io/dotdone/privacy.html
 
 ## What's New (v2 draft)
-DotDone is now Dot It. This update adds optional daily task reminders, a JSON export for your data, and a home-screen widget for one-tap logging. Your existing dots and tasks stay in place.
+Dot It now has optional daily task reminders, a JSON export for your data, and a home-screen widget for one-tap logging. Your existing dots and tasks stay in place. Creating colored tasks and logging from the calendar are easier to find.
