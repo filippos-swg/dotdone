@@ -8,6 +8,6 @@
 - [x] 6. STATE.md regenerated against work commit `5fe453e`.
 - [x] 7. aios-check exits with no errors (0E, 1W: feature branch).
 - [x] 8. Surface and ledger committed; close marker `2568f8c` recorded.
-- [ ] 9. Pushed with ledger present.
+- [x] 9. Pushed with ledger present at `cf6b1a7`.
 - [ ] 10. Ledger removed in its own commit and pushed.
 - [ ] 11. Outcome reported.
