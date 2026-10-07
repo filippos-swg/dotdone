@@ -1,6 +1,6 @@
 <!-- GENERATED — do not edit. Edits are overwritten at next close. -->
-Generated 2026-10-07 11:37 +0200 · HEAD c27a79b · branch feature/dot-it-v2 · host Souths-MacBook-Air.local · generator v2.0
-STALENESS RULE: if `git rev-parse HEAD` ≠ c27a79b, or the tree is dirty, this file is HISTORY. Regenerate before acting on it.
+Generated 2026-10-07 12:07 +0200 · HEAD 5b8f4f1 · branch feature/dot-it-v2 · host Souths-MacBook-Air.local · generator v2.0
+STALENESS RULE: if `git rev-parse HEAD` ≠ 5b8f4f1, or the tree is dirty, this file is HISTORY. Regenerate before acting on it.
 
 ## 1 · Identity
 <sub>CLAUDE.md, the five human lines — the only human input in this file</sub>
@@ -14,16 +14,16 @@ STALENESS RULE: if `git rev-parse HEAD` ≠ c27a79b, or the tree is dirty, this 
 ## 2 · Head
 <sub>git rev-parse HEAD · git log -1 · git rev-list --left-right --count @{u}...HEAD</sub>
 
-> **As of `c27a79b`.** The close commits this file after generating it, so the counts below are one commit old the moment they land. Re-run `aios-state` for current numbers.
+> **As of `5b8f4f1`.** The close commits this file after generating it, so the counts below are one commit old the moment they land. Re-run `aios-state` for current numbers.
 
-- **feature/dot-it-v2 @ c27a79b** — docs: record Calendar TestFlight build 7 availability
-- Committed 2026-10-07 11:37 by Filippos Arvanitakis
-- Upstream: origin/feature/dot-it-v2 · **4 ahead**, 0 behind
+- **feature/dot-it-v2 @ 5b8f4f1** — fix: make Dot It history and task logging clearer
+- Committed 2026-10-07 12:07 by Filippos Arvanitakis
+- Upstream: origin/feature/dot-it-v2 · **2 ahead**, 0 behind
 
 ## 3 · Working tree
 <sub>git status --porcelain + a filesystem diff against git ls-files</sub>
 
-> **As of `c27a79b`, before this file was committed.** `aios/STATE.md` and `aios/CLOSING` appear here for that reason and are not real dirt.
+> **As of `5b8f4f1`, before this file was committed.** `aios/STATE.md` and `aios/CLOSING` appear here for that reason and are not real dirt.
 
 - **2 modified:** `aios/CLOSING`, `aios/STATE.md`
 
@@ -34,14 +34,12 @@ STALENESS RULE: if `git rev-parse HEAD` ≠ c27a79b, or the tree is dirty, this 
 - `task/003-data-export` — last commit 2026-09-08, **no upstream, exists nowhere else**
 
 ## 5 · Since last close
-<sub>git log 67494d7..HEAD</sub>
+<sub>git log 67d6163..HEAD</sub>
 
-- `c27a79b` 2026-10-07 — docs: record Calendar TestFlight build 7 availability
-- `b7e4412` 2026-10-07 — fix: keep Calendar selection aligned while browsing
-- `e396a05` 2026-10-07 — fix: guard Calendar dots and clarify add flow
-- `04b1a54` 2026-10-07 — chore: open Dot It Calendar TestFlight close ledger
+- `5b8f4f1` 2026-10-07 — fix: make Dot It history and task logging clearer
+- `1a9ad1d` 2026-10-07 — chore: open Dot It v2 readiness close ledger
 
-Close marker: c27a79bdb5b4ad74651b2b371c8c940776e22619
+Close marker: 5b8f4f183f4f3e37de713fd96e664e79aa191d3e
 
 ## 6 · Awaiting judgment
 <sub>aios/LOG.md headings + **Status:** lines — headings, dates and statuses only, never bodies</sub>
@@ -56,7 +54,7 @@ Close marker: c27a79bdb5b4ad74651b2b371c8c940776e22619
 - `TASK_002.md` — Implemented on feature/dot-it-v2; device verification pendin · **3/7 ticked** · last touched 0d ago
 - `TASK_003.md` — Implemented on feature/dot-it-v2; device verification pendin · **2/6 ticked** · last touched 0d ago
 - `TASK_004.md` — Signed production build uploaded to TestFlight; Apple proces · **1/6 ticked** · last touched 0d ago
-- `TASK_005.md` — Build 7 ready in the internal TestFlight group; device retes · **7/10 ticked** · last touched 0d ago
+- `TASK_005.md` — Build 8 ready in the internal TestFlight group; device retes · **12/15 ticked** · last touched 0d ago
 
 ## 8 · Staleness
 <sub>git log -1 --format=%ad -- <path>, worst 10</sub>
@@ -84,9 +82,9 @@ Close marker: c27a79bdb5b4ad74651b2b371c8c940776e22619
 ## 11 · Could not determine
 <sub>the generator's own error list</sub>
 
-- §6 — LOG.md:256 heading carries no parseable date: "2026-07 — v1.0 resubmitted to Apple"
-- §6 — LOG.md:267 heading carries no parseable date: "2026-05/06 — Tasks system built (Guideline 4.2 response)"
-- §6 — LOG.md:283 heading carries no parseable date: "2026-05 — v1.0 core app"
+- §6 — LOG.md:268 heading carries no parseable date: "2026-07 — v1.0 resubmitted to Apple"
+- §6 — LOG.md:279 heading carries no parseable date: "2026-05/06 — Tasks system built (Guideline 4.2 response)"
+- §6 — LOG.md:295 heading carries no parseable date: "2026-05 — v1.0 core app"
 
 ---
 <sub>Generated on Souths-MacBook-Air.local by `/Users/southnorthflip/Projects/AIOS/Framework/project-aios/bin/aios-state.mjs` v2.0, against /Users/southnorthflip/Projects/dotdone. Regenerate with `node <that path> .` from the repo root. A hand edit is check failure S1.</sub>
