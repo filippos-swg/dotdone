@@ -1,12 +1,12 @@
 # TASK 004 — iOS Home-Screen Widget (Dot It v2)
 
-**Status:** Unsigned iOS Simulator build passes; signed build and device verification pending widget provisioning profile
+**Status:** Signed production build uploaded to TestFlight; Apple processing and device verification pending
 **Owner:** AI (Claude session) with Filippos review
 **Reviewer:** Filippos
 **Branch:** feature/dot-it-v2
 **Last updated:** 2026-10-07
 
-**Build evidence:** EAS iOS Simulator build `c337a2b4-cda3-4b6b-9f99-10f4293c6cf6` finished on 2026-10-07. This confirms native compilation, not real-device behavior.
+**Build evidence:** EAS iOS Simulator build `c337a2b4-cda3-4b6b-9f99-10f4293c6cf6` and signed production build `2052688b-b6df-48e1-b524-8ec261a0bf9b` (2.0.0 build 5) finished on 2026-10-07. Build 5 was uploaded to App Store Connect for TestFlight processing. Real-device behavior remains unverified.
 
 ---
 
@@ -47,6 +47,6 @@ Highest long-term value, biggest technical lift. Requires a native WidgetKit ext
 - [ ] Tapping the widget records a dot without opening the app (iOS 17+)
 - [ ] Widget dots merge into the app's history with no data loss
 - [ ] Existing users' data migrates transparently
-- [ ] EAS production build passes
+- [x] EAS production build passes
 - [ ] Decision or change entry written in `aios/LOG.md`; `aios/STATE.md` regenerated at close
 - [ ] Human review complete

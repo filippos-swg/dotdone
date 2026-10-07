@@ -7,6 +7,10 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — Dot It v2 signed build reaches App Store Connect
+### Validation
+EAS production build 2.0.0 (5) completed with separate main-app and widget provisioning profiles: https://expo.dev/accounts/fliphq/projects/dotdone/builds/2052688b-b6df-48e1-b524-8ec261a0bf9b. The existing App Store Connect app accepted the binary for TestFlight processing: https://expo.dev/accounts/fliphq/projects/dotdone/submissions/6d227ec9-21b0-4a0b-a70e-e3ed05b3cf29. App Store Connect showed v1.0 Ready for Distribution and no v2 review submission. Real-device tests, including widget reminder behavior, remain open. The submit profile now records the existing app ID for future noninteractive test uploads.
+
 ## 2026-10-07 — Dot It v2 simulator build passes
 ### Validation
 The final unsigned EAS iOS Simulator build, including the WidgetKit target and NDot47 font, completed successfully: https://expo.dev/accounts/fliphq/projects/dotdone/builds/c337a2b4-cda3-4b6b-9f99-10f4293c6cf6. TypeScript, Metro iOS export, two storage migration tests, Expo prebuild, and plist checks also passed. The signed build remains blocked on the new widget provisioning profile; real-device behavior has not been verified.
