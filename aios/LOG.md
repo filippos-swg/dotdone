@@ -7,6 +7,12 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — Dot It v2 simulator build passes
+### Validation
+The final unsigned EAS iOS Simulator build, including the WidgetKit target and NDot47 font, completed successfully: https://expo.dev/accounts/fliphq/projects/dotdone/builds/c337a2b4-cda3-4b6b-9f99-10f4293c6cf6. TypeScript, Metro iOS export, two storage migration tests, Expo prebuild, and plist checks also passed. The signed build remains blocked on the new widget provisioning profile; real-device behavior has not been verified.
+
+---
+
 ## 2026-10-07 — Dot It v2 name and scope
 **Status:** APPROVED
 **Decision:** Rename the existing app to “Dot It” for version 2 and use the previously approved roadmap: opt-in task reminders, JSON export, then the home-screen widget. Keep the existing App Store app record, bundle ID `se.southnorth.dotdone`, EAS project, and old JSON filenames so installed users retain their history.

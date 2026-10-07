@@ -12,4 +12,6 @@
 
 The first EAS v2 build could not start: the main target has credentials, but `se.southnorth.dotdone.widget` needs its own Apple identifier and provisioning profile. Run `eas credentials --platform ios`, select `production`, sign in to the Apple Developer account, and set up build credentials for the widget target. Then run `eas build --platform ios --profile production`. The owner should test the build through TestFlight before submitting the App Store update.
 
+Native compilation passed in the [unsigned iOS Simulator build](https://expo.dev/accounts/fliphq/projects/dotdone/builds/c337a2b4-cda3-4b6b-9f99-10f4293c6cf6) on 2026-10-07. It does not replace real-device and upgrade testing.
+
 Current observation (2026-10-07): the public Swedish App Store listing shows version 1.0 (“DotDone — Dot It”); EAS has a completed 1.1.0 production build. App Store Connect's private submission status has not been verified.

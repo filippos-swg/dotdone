@@ -1,10 +1,12 @@
 # TASK 004 — iOS Home-Screen Widget (Dot It v2)
 
-**Status:** Implementation in progress; native build blocked on widget provisioning profile
+**Status:** Unsigned iOS Simulator build passes; signed build and device verification pending widget provisioning profile
 **Owner:** AI (Claude session) with Filippos review
 **Reviewer:** Filippos
 **Branch:** feature/dot-it-v2
 **Last updated:** 2026-10-07
+
+**Build evidence:** EAS iOS Simulator build `c337a2b4-cda3-4b6b-9f99-10f4293c6cf6` finished on 2026-10-07. This confirms native compilation, not real-device behavior.
 
 ---
 
