@@ -1,12 +1,12 @@
 # TASK 004 — iOS Home-Screen Widget (Dot It v2)
 
-**Status:** Signed production build uploaded to TestFlight; Apple processing and device verification pending
+**Status:** Signed build 9 ready in internal TestFlight; widget device verification pending
 **Owner:** AI (Claude session) with Filippos review
 **Reviewer:** Filippos
 **Branch:** feature/dot-it-v2
 **Last updated:** 2026-10-07
 
-**Build evidence:** EAS iOS Simulator build `c337a2b4-cda3-4b6b-9f99-10f4293c6cf6` and signed production build `2052688b-b6df-48e1-b524-8ec261a0bf9b` (2.0.0 build 5) finished on 2026-10-07. Build 5 was uploaded to App Store Connect for TestFlight processing. Real-device behavior remains unverified.
+**Build evidence:** EAS iOS Simulator build `c337a2b4-cda3-4b6b-9f99-10f4293c6cf6` and signed production build `2052688b-b6df-48e1-b524-8ec261a0bf9b` (2.0.0 build 5) finished on 2026-10-07. The latest signed build `18fd9225-da96-46a6-acbe-c4ff8daac521` (2.0.0 build 9) has processed and is in the internal TestFlight group. Widget behavior on a real device remains unverified.
 
 ---
 
