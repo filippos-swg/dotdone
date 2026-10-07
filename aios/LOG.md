@@ -12,7 +12,7 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 **Evidence:** Direct owner report, plus a current TestFlight screenshot showing four separate default-dot rows at 10:55 after two Calendar logging actions.
 
-**Practical consequence:** Calendar now ignores overlapping save callbacks and asks for confirmation before recording the same task twice within five seconds. Its anonymous footer + becomes a labeled Make a Dot / Make Another Dot action below the calendar, and its Home link is labeled Dot It. Home and Tasks copy now explain where named colors are created. A real-device retest remains required.
+**Practical consequence:** Calendar now ignores overlapping save callbacks and asks for confirmation before recording the same task twice within five seconds. Its anonymous footer + becomes a labeled Make a Dot / Make Another Dot action below the calendar, and its Home link is labeled Dot It. The date header follows the selected calendar day when browsing weeks or months and resets to today when the calendar is reopened. Home and Tasks copy now explain where named colors are created. A real-device retest remains required.
 
 ### Diagnosis limit
 The exact event source is not yet proven; an iPhone retest is required before calling the bug closed.

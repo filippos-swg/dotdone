@@ -66,8 +66,11 @@ export default function CalendarScreen({ navigation, route }: Props) {
 
   useFocusEffect(
     useCallback(() => {
+      const focusDate = route.params?.initialDate ?? todayString();
+      setSelectedDate(focusDate);
+      setCalendarAnchor(focusDate);
       loadData();
-    }, [])
+    }, [route.params?.initialDate])
   );
 
   // A widget can add a dot while this screen remains mounted in the background.
@@ -199,9 +202,11 @@ export default function CalendarScreen({ navigation, route }: Props) {
   };
 
   const handleCalendarNav = (dir: -1 | 1) => {
-    setCalendarAnchor(a =>
-      viewMode === 'week' ? addDays(a, dir * 7) : addMonths(a, dir)
-    );
+    const next = viewMode === 'week'
+      ? addDays(selectedDate, dir * 7)
+      : addMonths(selectedDate, dir);
+    setSelectedDate(next);
+    setCalendarAnchor(next);
   };
 
   const handleToggleView = () => {
@@ -329,7 +334,10 @@ export default function CalendarScreen({ navigation, route }: Props) {
                 <TouchableOpacity
                   key={di}
                   style={styles.calCellContainer}
-                  onPress={() => setSelectedDate(dateStr)}
+                  onPress={() => {
+                    setSelectedDate(dateStr);
+                    setCalendarAnchor(dateStr);
+                  }}
                   activeOpacity={0.6}
                 >
                   <Text style={[

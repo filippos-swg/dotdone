@@ -24,6 +24,7 @@ During 2.0.0 (5) TestFlight testing, Filippos reported four saved dots after mak
 
 - [x] Calendar guards rapid duplicate saves and still permits a confirmed second dot.
 - [x] Calendar has a labeled Make a Dot / Make Another Dot action below the grid.
+- [x] Calendar browsing keeps the selected day, grid, and add destination aligned.
 - [x] Home and Tasks empty-state copy explain how to make named, colored dots.
 - [x] TypeScript, unit tests, and iOS Metro export pass.
 - [ ] Updated signed build is available in TestFlight.
