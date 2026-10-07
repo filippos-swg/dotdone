@@ -7,6 +7,20 @@ Newest first. Append only — never rewrite an entry. A correction is a new entr
 
 ---
 
+## 2026-10-07 — TestFlight Calendar feedback
+**Status:** APPROVED
+
+**Evidence:** Direct owner report, plus a current TestFlight screenshot showing four separate default-dot rows at 10:55 after two Calendar logging actions.
+
+**Practical consequence:** Calendar now ignores overlapping save callbacks and asks for confirmation before recording the same task twice within five seconds. Its anonymous footer + becomes a labeled Make a Dot / Make Another Dot action below the calendar, and its Home link is labeled Dot It. Home and Tasks copy now explain where named colors are created. A real-device retest remains required.
+
+### Diagnosis limit
+The exact event source is not yet proven; an iPhone retest is required before calling the bug closed.
+
+The 2.0.0 (5) IPA's `CFBundleDisplayName` is `Dot It` with no localized override, though the owner reports seeing the old combined name under the installed icon. The App Store Connect listing continues to use `DotDone — Dot It` because Apple rejected `Dot It` as already in use. The home-screen label discrepancy needs a device screenshot or refresh to resolve; no bundle ID or storage name was changed.
+
+---
+
 ## 2026-10-07 — Dot It v2 signed build reaches App Store Connect
 ### Validation
 EAS production build 2.0.0 (5) completed with separate main-app and widget provisioning profiles: https://expo.dev/accounts/fliphq/projects/dotdone/builds/2052688b-b6df-48e1-b524-8ec261a0bf9b. The existing App Store Connect app accepted the binary for TestFlight processing: https://expo.dev/accounts/fliphq/projects/dotdone/submissions/6d227ec9-21b0-4a0b-a70e-e3ed05b3cf29. App Store Connect showed v1.0 Ready for Distribution and no v2 review submission. Real-device tests, including widget reminder behavior, remain open. The submit profile now records the existing app ID for future noninteractive test uploads.

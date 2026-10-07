@@ -214,7 +214,8 @@ export default function TasksScreen({ navigation }: Props) {
       <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
         {tasks.length === 0 && formMode === 'none' && (
           <Text style={styles.emptyText}>
-            NO TASKS YET.{'\n'}TAP + TO CREATE ONE.
+            NO COLORED TASKS YET.{'\n'}
+            TAP + TO NAME ONE AND PICK ITS COLOR.
           </Text>
         )}
 

@@ -141,7 +141,8 @@ export default function HomeScreen({ navigation }: Props) {
             <View style={styles.spacer} />
             <Text style={styles.instructions}>
               TAP TO RECORD A DOT.{'\n'}
-              HOLD TO CHOOSE A TASK.
+              HOLD TO CHOOSE A COLORED TASK.{'\n'}
+              CREATE ONE IN MY TASKS.
             </Text>
           </View>
         )}

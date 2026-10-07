@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -37,11 +37,13 @@ import {
 } from '../utils/dateUtils';
 import TaskPalette, { PaletteItem } from '../components/TaskPalette';
 import { syncReminders } from '../utils/notifications';
+import { hasRecentDot } from '../utils/recentDot';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calendar'>;
 
 const FONT = 'NDot47';
 const DAY_HEADERS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const RECENT_THRESHOLD_MS = 5000;
 
 // Normalise legacy 'black' string to hex
 function resolveColor(color: string): string {
@@ -58,6 +60,7 @@ export default function CalendarScreen({ navigation, route }: Props) {
   const [showHint, setShowHint] = useState(false);
   const [showPalette, setShowPalette] = useState(false);
   const [tasks, setTasks] = useState<DotTask[]>([]);
+  const savingDot = useRef(false);
 
   // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -89,22 +92,55 @@ export default function CalendarScreen({ navigation, route }: Props) {
 
   // ── Add dot on selected day ──────────────────────────────────────────────────
 
-  const handleAddDot = async (item: PaletteItem) => {
-    setShowPalette(false);
+  const saveDot = async (item: PaletteItem, date: string) => {
     const entry: DotEntry = {
       id: generateId(),
-      date: selectedDate,
+      date,
       timestamp: new Date().toISOString(),
       actionName: item.name === 'DEFAULT' ? 'Default' : item.name,
       color: item.color,
       taskId: item.id === 'default' ? undefined : item.id,
     };
+    await addEntry(entry);
+    syncReminders();
+    await loadData();
+  };
+
+  const handleAddDot = async (item: PaletteItem) => {
+    if (savingDot.current) return;
+    savingDot.current = true;
+    setShowPalette(false);
+    const date = selectedDate;
     try {
-      await addEntry(entry);
-      syncReminders();
-      await loadData();
+      const taskId = item.id === 'default' ? undefined : item.id;
+      const entries = await getAllEntries();
+      const now = Date.now();
+      const recentlyAdded = hasRecentDot(entries, date, taskId, now, RECENT_THRESHOLD_MS);
+      if (recentlyAdded) {
+        Alert.alert(
+          'HOLD ON',
+          'YOU JUST ADDED THIS DOT. ADD ANOTHER?',
+          [
+            { text: 'NO', style: 'cancel' },
+            {
+              text: 'YES',
+              onPress: () => {
+                if (savingDot.current) return;
+                savingDot.current = true;
+                saveDot(item, date)
+                  .catch(err => Alert.alert('SAVE ERROR', String(err)))
+                  .finally(() => { savingDot.current = false; });
+              },
+            },
+          ]
+        );
+        return;
+      }
+      await saveDot(item, date);
     } catch (err) {
       Alert.alert('SAVE ERROR', String(err));
+    } finally {
+      savingDot.current = false;
     }
   };
 
@@ -330,6 +366,19 @@ export default function CalendarScreen({ navigation, route }: Props) {
 
       </View>
 
+      <TouchableOpacity
+        style={styles.makeDotBtn}
+        onPress={() => setShowPalette(true)}
+        activeOpacity={0.7}
+        accessibilityRole="button"
+      >
+        <Text style={styles.makeDotText}>
+          {selectedDate !== todayString()
+            ? 'ADD A DOT TO THIS DAY'
+            : dotCount > 0 ? 'MAKE ANOTHER DOT' : 'MAKE A DOT'}
+        </Text>
+      </TouchableOpacity>
+
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
       <View style={styles.footer}>
         <View style={styles.footerSlot}>
@@ -337,18 +386,7 @@ export default function CalendarScreen({ navigation, route }: Props) {
             onPress={() => navigation.navigate('Home')}
             activeOpacity={0.6}
           >
-            <Text style={styles.footerBtnText}>HOME</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.footerSlot}>
-          <TouchableOpacity
-            style={styles.addBtn}
-            onPress={() => setShowPalette(true)}
-            activeOpacity={0.7}
-          >
-            <View style={styles.plusH} />
-            <View style={styles.plusV} />
+            <Text style={styles.footerBtnText}>DOT IT</Text>
           </TouchableOpacity>
         </View>
 
@@ -539,6 +577,21 @@ const styles = StyleSheet.create({
     color: '#000',
   },
 
+  makeDotBtn: {
+    minHeight: 52,
+    marginHorizontal: 24,
+    marginBottom: 8,
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  makeDotText: {
+    fontFamily: FONT,
+    fontSize: 12,
+    color: '#fff',
+    textAlign: 'center',
+  },
+
   // ── Footer ────────────────────────────────────────────────────────────────────
   footer: {
     flexDirection: 'row',
@@ -555,27 +608,5 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#000',
     letterSpacing: 0.5,
-  },
-  addBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  plusH: {
-    position: 'absolute',
-    width: 18,
-    height: 2,
-    backgroundColor: '#fff',
-    borderRadius: 1,
-  },
-  plusV: {
-    position: 'absolute',
-    width: 2,
-    height: 18,
-    backgroundColor: '#fff',
-    borderRadius: 1,
   },
 });
